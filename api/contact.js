@@ -44,11 +44,11 @@ ${message || 'не указано'}
     });
 
   } catch (error) {
-    console.error(error);
+    console.error('Contact form error:', error.message);
 
     return res.status(500).json({
       success: false,
-      error: 'Server error'
+      error: 'Server error: ' + (error.message || 'Unknown error')
     });
   }
 }
