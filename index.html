@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="theme-color" content="#04090d"/>
+  <meta name="robots" content="index, follow"/>
+
+  <title>TAJCODE LAB — IT-разработка в Центральной Азии</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1055/1055687.png"/>
+  <meta name="description" content="TAJCODE LAB — студия разработки мобильных приложений, веб-сайтов и IT-продуктов в Таджикистане и Центральной Азии."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --bg:#04090d;--bg2:#081118;--bg3:#0c1a24;
+      --accent:#00e5ff;--gold:#f0c040;
+      --text:#e6f2f8;--muted:#567a90;
+      --border:rgba(0,229,255,0.1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    /* NOISE */
+    body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:.5}
+
+    /* GRID */
+    .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:linear-gradient(rgba(0,229,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.022) 1px,transparent 1px);
+      background-size:60px 60px}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:22px 6vw;background:transparent;
+      backdrop-filter:blur(0px);border-bottom:1px solid transparent;
+      transition:all .4s ease}
+    nav.scrolled{padding:14px 6vw;background:rgba(4,9,13,.94);backdrop-filter:blur(20px);border-bottom-color:var(--border)}
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-.03em;color:var(--text);text-decoration:none}
+    .logo span{color:var(--accent)}
+    .nav-links{display:flex;gap:2.2rem;list-style:none;align-items:center}
+    .nav-links a{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+    .nav-links a:hover{color:var(--accent)}
+    .nav-cta{background:var(--accent)!important;color:var(--bg)!important;padding:10px 22px!important;border-radius:7px!important;font-weight:700!important;transition:box-shadow .2s,transform .2s!important}
+    .nav-cta:hover{box-shadow:0 0 28px rgba(0,229,255,.5)!important;transform:translateY(-1px)!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .hamburger.open span:nth-child(2){opacity:0}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mob-menu{display:none;flex-direction:column;position:fixed;top:62px;left:0;right:0;background:rgba(4,9,13,.98);border-bottom:1px solid var(--border);z-index:999;padding:12px 6vw 24px}
+    .mob-menu.open{display:flex}
+    .mob-menu a{color:var(--muted);text-decoration:none;font-size:.97rem;font-weight:500;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);transition:color .2s}
+    .mob-menu a:last-child{border-bottom:none;color:var(--accent);font-family:'Syne',sans-serif;font-weight:700;margin-top:6px}
+    .mob-menu a:hover{color:var(--accent)}
+
+    /* HERO */
+    .hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 6vw 80px;overflow:hidden}
+    .orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;animation:drift 11s ease-in-out infinite}
+    .o1{width:600px;height:600px;top:-150px;left:-150px;background:radial-gradient(circle,rgba(0,229,255,.1) 0%,transparent 70%);animation-delay:0s}
+    .o2{width:440px;height:440px;bottom:-80px;right:-100px;background:radial-gradient(circle,rgba(0,180,216,.09) 0%,transparent 70%);animation-delay:-5s}
+    .o3{width:320px;height:320px;top:40%;left:55%;background:radial-gradient(circle,rgba(240,192,64,.07) 0%,transparent 70%);animation-delay:-8s}
+    @keyframes drift{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.07)}}
+
+    .hero-badge{display:inline-flex;align-items:center;gap:9px;background:rgba(0,229,255,.07);border:1px solid rgba(0,229,255,.22);border-radius:50px;padding:7px 20px;font-size:.74rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:36px;opacity:0;animation:up .9s .1s forwards}
+    .bdot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+
+    h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,8.5vw,7.8rem);font-weight:800;line-height:.94;letter-spacing:-.04em;margin-bottom:30px;opacity:0;animation:up .9s .3s forwards}
+    .l1{display:block;color:var(--text)}
+    .l2{display:block;background:linear-gradient(105deg,var(--accent) 0%,var(--gold) 65%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+    .hero-sub{font-size:clamp(.95rem,1.8vw,1.15rem);color:var(--muted);max-width:580px;line-height:1.78;font-weight:300;margin-bottom:52px;opacity:0;animation:up .9s .48s forwards}
+
+    .hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;opacity:0;animation:up .9s .62s forwards}
+    .btn-p{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:var(--bg);font-family:'Syne',sans-serif;font-weight:700;font-size:.93rem;padding:16px 36px;border-radius:9px;border:none;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;transition:all .25s}
+    .btn-p::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 55%)}
+    .btn-p:hover{box-shadow:0 0 44px rgba(0,229,255,.4),0 10px 30px rgba(0,0,0,.3);transform:translateY(-2px)}
+    .btn-o{display:inline-flex;align-items:center;gap:9px;background:transparent;color:var(--text);font-family:'Syne',sans-serif;font-weight:600;font-size:.93rem;padding:16px 36px;border-radius:9px;border:1px solid var(--border);cursor:pointer;text-decoration:none;transition:all .25s}
+    .btn-o:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,229,255,.05)}
+
+    .hero-stats{display:flex;gap:52px;flex-wrap:wrap;justify-content:center;margin-top:76px;opacity:0;animation:up .9s .8s forwards}
+    .stat{text-align:center}
+    .sn{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:var(--accent);line-height:1}
+    .sl{font-size:.74rem;color:var(--muted);font-weight:400;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+
+    @keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+    /* MARQUEE */
+    .mq{position:relative;z-index:1;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(0,229,255,.02);padding:17px 0}
+    .mq-track{display:flex;animation:mq 30s linear infinite;width:max-content}
+    .mq-track:hover{animation-play-state:paused}
+    .mi{white-space:nowrap;font-family:'Syne',sans-serif;font-weight:600;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 42px}
+    .mi b{color:var(--accent)}
+    @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* SECTIONS */
+    section{position:relative;z-index:1;padding:110px 6vw}
+    .sl2{display:flex;align-items:center;gap:12px;font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+    .sl2::before{content:'';width:26px;height:1px;background:var(--accent)}
+    .st{font-family:'Syne',sans-serif;font-size:clamp(1.9rem,3.8vw,3.1rem);font-weight:800;line-height:1.07;letter-spacing:-.025em;margin-bottom:18px}
+    .ss{font-size:.96rem;color:var(--muted);line-height:1.76;max-width:520px;font-weight:300}
+
+    /* SERVICES */
+    .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1px;margin-top:68px;background:var(--border);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+    .svc{background:var(--bg2);padding:44px 34px;position:relative;overflow:hidden;transition:background .3s}
+    .svc::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .35s}
+    .svc:hover{background:var(--bg3)}
+    .svc:hover::before{transform:scaleX(1)}
+    .svc-bg{position:absolute;top:14px;right:20px;font-family:'Syne',sans-serif;font-size:4rem;font-weight:800;color:rgba(0,229,255,.04);line-height:1;pointer-events:none}
+    .svc-icon{width:52px;height:52px;border-radius:12px;background:rgba(0,229,255,.09);border:1px solid rgba(0,229,255,.18);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:24px}
+    .svc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.08rem;margin-bottom:11px}
+    .svc-desc{font-size:.87rem;color:var(--muted);line-height:1.68;font-weight:300}
+
+    /* PROCESS */
+    #process{background:var(--bg2)}
+    .proc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:40px;margin-top:68px;position:relative}
+    .proc-grid::before{content:'';position:absolute;top:26px;left:9%;right:9%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.22}
+    .step{text-align:center}
+    .step-n{width:52px;height:52px;border-radius:50%;background:var(--bg);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.97rem;color:var(--accent);margin:0 auto 20px;z-index:1;position:relative;transition:all .3s}
+    .step:hover .step-n{background:var(--accent);color:var(--bg);box-shadow:0 0 30px rgba(0,229,255,.4)}
+    .step-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.94rem;margin-bottom:9px}
+    .step-desc{font-size:.84rem;color:var(--muted);line-height:1.65;font-weight:300}
+
+    /* STACK */
+    .stack-flex{display:flex;flex-wrap:wrap;gap:10px;margin-top:44px}
+    .tag{display:flex;align-items:center;gap:8px;background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.14);border-radius:8px;padding:10px 18px;font-size:.86rem;font-weight:500;transition:all .2s;cursor:default}
+    .tag:hover{background:rgba(0,229,255,.12);border-color:rgba(0,229,255,.38);transform:translateY(-2px)}
+    .tag-dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+    /* PRICING */
+    .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px;margin-top:64px}
+    .pcard{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:42px 34px;position:relative;transition:transform .3s,box-shadow .3s}
+    .pcard:hover{transform:translateY(-5px);box-shadow:0 24px 64px rgba(0,0,0,.35)}
+    .pcard.featured{border-color:var(--accent);background:linear-gradient(155deg,rgba(0,229,255,.07) 0%,var(--bg2) 55%)}
+    .pcard.featured::before{content:'Популярный';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--bg);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 18px;border-radius:50px}
+    .pname{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:6px}
+    .pdesc{font-size:.84rem;color:var(--muted);margin-bottom:22px;font-weight:300;line-height:1.55}
+    .pprice{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:var(--accent);line-height:1;margin-bottom:26px}
+    .pprice sup{font-size:.9rem;vertical-align:super}
+    .pprice small{font-size:.82rem;color:var(--muted);font-weight:400}
+    .pfeats{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:34px}
+    .pfeats li{display:flex;align-items:center;gap:10px;font-size:.88rem}
+    .pfeats li::before{content:'✓';color:var(--accent);font-weight:700;width:18px;height:18px;background:rgba(0,229,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;flex-shrink:0}
+
+    /* FAQ */
+    .faq-list{margin-top:54px;max-width:700px;display:flex;flex-direction:column;gap:2px}
+    .faq-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+    .faq-item.open{border-color:rgba(0,229,255,.25)}
+    .faq-q{padding:21px 26px;font-family:'Syne',sans-serif;font-weight:600;font-size:.97rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:color .2s;user-select:none}
+    .faq-q:hover{color:var(--accent)}
+    .faq-ico{width:28px;height:28px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;transition:all .3s;font-size:1.1rem;line-height:1}
+    .faq-item.open .faq-ico{background:var(--accent);border-color:var(--accent);color:var(--bg);transform:rotate(45deg)}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .38s ease,padding .3s;font-size:.9rem;color:var(--muted);line-height:1.72;font-weight:300;padding:0 26px}
+    .faq-item.open .faq-a{max-height:300px;padding:0 26px 20px}
+
+    /* FORM / CTA */
+    #contact{background:var(--bg2)}
+    #contact::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 50% 50%,rgba(0,229,255,.055) 0%,transparent 70%);pointer-events:none}
+    .cta-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+    .cta-left .st{margin-bottom:20px}
+    .cta-why{margin-top:40px;display:flex;flex-direction:column;gap:18px}
+    .why-item{display:flex;align-items:flex-start;gap:16px}
+    .why-icon{width:40px;height:40px;border-radius:9px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+    .why-text strong{display:block;font-family:'Syne',sans-serif;font-weight:700;font-size:.93rem;margin-bottom:4px}
+    .why-text p{font-size:.84rem;color:var(--muted);font-weight:300;line-height:1.55}
+
+    .form-box{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:44px}
+    .form-title{font-family:'Syne',sans-serif;font-size:1.45rem;font-weight:800;margin-bottom:6px}
+    .form-sub{font-size:.87rem;color:var(--muted);margin-bottom:34px;font-weight:300}
+    .fg{margin-bottom:16px}
+    .fg label{display:block;font-size:.75rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+    .fg input,.fg textarea,.fg select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:13px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.93rem;outline:none;transition:border-color .2s,box-shadow .2s;resize:vertical;-webkit-appearance:none;appearance:none}
+    .fg select option{background:var(--bg)}
+    .fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,229,255,.08)}
+    .fg input::placeholder,.fg textarea::placeholder{color:var(--muted)}
+    .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .btn-submit{width:100%;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:10px}
+    #form-msg{margin-top:14px;font-size:.88rem;text-align:center;min-height:20px;font-weight:500}
+    #form-msg.ok{color:#4ade80}
+    #form-msg.err{color:#f87171}
+
+    /* FOOTER */
+    footer{position:relative;z-index:1;background:var(--bg2);border-top:1px solid var(--border);padding:60px 6vw 36px}
+    .foot-inner{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:52px}
+    .foot-brand .logo{display:block;margin-bottom:14px}
+    .foot-brand p{font-size:.87rem;color:var(--muted);line-height:1.65;font-weight:300;max-width:260px}
+    .foot-socials{display:flex;gap:12px;margin-top:22px}
+    .fsoc{width:38px;height:38px;border-radius:8px;background:rgba(0,229,255,.07);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1rem;color:var(--muted);transition:all .2s}
+    .fsoc:hover{background:rgba(0,229,255,.14);border-color:rgba(0,229,255,.35);color:var(--accent)}
+    .fcol h4{font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+    .fcol ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .fcol ul a{text-decoration:none;color:var(--muted);font-size:.87rem;font-weight:300;transition:color .2s}
+    .fcol ul a:hover{color:var(--accent)}
+    .foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:28px;border-top:1px solid var(--border)}
+    .foot-bottom p{font-size:.8rem;color:var(--muted)}
+    .foot-bottom p span{color:var(--accent)}
+
+    /* SCROLL REVEAL */
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .cta-inner{grid-template-columns:1fr}
+      .foot-inner{grid-template-columns:1fr 1fr}
+      .proc-grid::before{display:none}
+    }
+    @media(max-width:680px){
+      .nav-links{display:none}
+      .hamburger{display:flex}
+      .hero-stats{gap:32px}
+      .sn{font-size:2rem}
+      .fg-row{grid-template-columns:1fr}
+      .form-box{padding:28px 22px}
+      .foot-inner{grid-template-columns:1fr}
+      .foot-bottom{flex-direction:column;text-align:center}
+      .cta-inner{gap:44px}
+    }
+
+    /* TELEGRAM FLOATING */
+    .tg-float{position:fixed;bottom:28px;right:28px;z-index:500;width:54px;height:54px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,229,255,.45);text-decoration:none;transition:transform .25s,box-shadow .25s;animation:popIn .6s 2s both}
+    .tg-float:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 8px 36px rgba(0,229,255,.6)}
+    @keyframes popIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+    .tg-float svg{width:26px;height:26px;fill:var(--bg)}
+  </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- TELEGRAM FLOAT -->
+<a class="tg-float" href="https://t.me/tajcodelab_bot" target="_blank" rel="noopener" title="Telegram">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+</a>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">TAJ<span>CODE</span> LAB</a>
+  <ul class="nav-links">
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="#process">Процесс</a></li>
+    <li><a href="#pricing">Цены</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nav-cta">Заявка</a></li>
+  </ul>
+  <button class="hamburger" id="hbg" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="#services" class="mob-link">Услуги</a>
+  <a href="#process" class="mob-link">Процесс</a>
+  <a href="#pricing" class="mob-link">Цены</a>
+  <a href="#faq" class="mob-link">FAQ</a>
+  <a href="#contact" class="mob-link">Оставить заявку →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+
+  <div class="hero-badge">
+    <span class="bdot"></span>
+    Таджикистан &amp; Центральная Азия
+  </div>
+
+  <h1>
+    <span class="l1">Мы строим</span>
+    <span class="l2">цифровое будущее</span>
+  </h1>
+
+  <p class="hero-sub">
+    TAJCODE LAB — студия полного цикла. Мобильные приложения, веб-сайты, веб-приложения и любые IT-продукты — от идеи до запуска.
+  </p>
+
+  <div class="hero-btns">
+    <a href="#contact" class="btn-p">
+      Начать проект
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="#services" class="btn-o">
+      Наши услуги
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><div class="sn" data-target="50">0</div><div class="sl">Проектов</div></div>
+    <div class="stat"><div class="sn" data-target="3">0</div><div class="sl">Года опыта</div></div>
+    <div class="stat"><div class="sn" data-target="40">0</div><div class="sl">Клиентов</div></div>
+    <div class="stat"><div class="sn" data-target="98">0</div><div class="sl">% довольных</div></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq">
+  <div class="mq-track">
+    <span class="mi"><b>✦</b> Мобильные приложения</span>
+    <span class="mi"><b>✦</b> Веб-разработка</span>
+    <span class="mi"><b>✦</b> UI/UX Дизайн</span>
+    <span class="mi"><b>✦</b> Telegram-боты</span>
+    <span class="mi"><b>✦</b> CRM-системы</span>
+    <span class="mi"><b>✦</b> API интеграции</span>
+    <span class="mi"><b>✦</b> SEO-оптимизация</span>
+    <span class="mi"><b>✦</b> Техподдержка</span>
+    <span class="mi"><b>✦</b> Мобильные приложения</span>
+    <span class="mi"><b>✦</b> Веб-разработка</span>
+    <span class="mi"><b>✦</b> UI/UX Дизайн</span>
+    <span class="mi"><b>✦</b> Telegram-боты</span>
+    <span class="mi"><b>✦</b> CRM-системы</span>
+    <span class="mi"><b>✦</b> API интеграции</span>
+    <span class="mi"><b>✦</b> SEO-оптимизация</span>
+    <span class="mi"><b>✦</b> Техподдержка</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="sl2">Что мы делаем</div>
+  <h2 class="st">Полный спектр<br>IT-разработки</h2>
+  <p class="ss">От простого лендинга до сложного мобильного приложения — мы закрываем любые задачи под ключ.</p>
+
+  <div class="svc-grid reveal">
+    <div class="svc">
+      <div class="svc-bg">01</div>
+      <div class="svc-icon">📱</div>
+      <div class="svc-title">Мобильные приложения</div>
+      <div class="svc-desc">iOS и Android — нативная и кросс-платформенная разработка (React Native, Flutter). От MVP до полноценного продукта.</div>
+    </div>
+    <div class="svc">
+      <div class="svc-bg">02</div>
+      <div class="svc-icon">🌐</div>
+      <div class="svc-title">Веб-сайты и лендинги</div>
+      <div class="svc-desc">Корпоративные сайты, лендинги, портфолио. Быстрые, красивые, адаптивные — конвертируют посетителей в клиентов.</div>
+    </div>
+    <div class="svc">
+      <div class="svc-bg">03</div>
+      <div class="svc-icon">⚙️</div>
+      <div class="svc-title">Веб-приложения</div>
+      <div class="svc-desc">CRM, ERP, онлайн-платформы, маркетплейсы и SaaS-продукты. Сложная логика, простой интерфейс.</div>
+    </div>
+    <div class="svc">
+      <div class="svc-bg">04</div>
+      <div class="svc-icon">🤖</div>
+      <div class="svc-title">Telegram-боты</div>
+      <div class="svc-desc">Боты для бизнеса: приём заявок, автоворонки, интеграция с CRM, уведомления, интернет-магазины прямо в Telegram.</div>
+    </div>
+    <div class="svc">
+      <div class="svc-bg">05</div>
+      <div class="svc-icon">🎨</div>
+      <div class="svc-title">UI/UX Дизайн</div>
+      <div class="svc-desc">Дизайн интерфейсов, прототипирование, UX-аудит. Делаем так, чтобы пользователи влюблялись в ваш продукт.</div>
+    </div>
+    <div class="svc">
+      <div class="svc-bg">06</div>
+      <div class="svc-icon">🔗</div>
+      <div class="svc-title">Интеграции и API</div>
+      <div class="svc-desc">Платёжные системы, карты, аналитика, мессенджеры, сторонние сервисы — подключим что угодно к вашему продукту.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="sl2">Как мы работаем</div>
+  <h2 class="st">Прозрачный процесс<br>без сюрпризов</h2>
+  <p class="ss">Чёткая схема работы — вы всегда знаете что происходит и на каком этапе ваш проект.</p>
+
+  <div class="proc-grid reveal">
+    <div class="step">
+      <div class="step-n">01</div>
+      <div class="step-title">Бриф и анализ</div>
+      <div class="step-desc">Разбираем вашу задачу, изучаем нишу и конкурентов, фиксируем требования в документе.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">02</div>
+      <div class="step-title">Дизайн и прототип</div>
+      <div class="step-desc">Создаём макеты, согласовываем внешний вид и логику. Правки на этом этапе — бесплатно.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">03</div>
+      <div class="step-title">Разработка</div>
+      <div class="step-desc">Пишем код, ведём вас в Telegram — показываем прогресс каждую неделю.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">04</div>
+      <div class="step-title">Тестирование</div>
+      <div class="step-desc">Проверяем на разных устройствах, исправляем баги, проводим нагрузочные тесты.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">05</div>
+      <div class="step-title">Запуск</div>
+      <div class="step-desc">Деплоим продукт, настраиваем домен и хостинг. Помогаем с публикацией в App Store / Play.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">06</div>
+      <div class="step-title">Поддержка</div>
+      <div class="step-desc">Остаёмся на связи после запуска: обновления, доработки, мониторинг — всё включено.</div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack">
+  <div class="sl2">Технологии</div>
+  <h2 class="st">Современный стек<br>проверенных технологий</h2>
+  <p class="ss">Используем то, что реально работает в продакшене — надёжно, масштабируемо и поддерживаемо.</p>
+
+  <div class="stack-flex reveal">
+    <div class="tag"><span class="tag-dot"></span>React / Next.js</div>
+    <div class="tag"><span class="tag-dot"></span>React Native</div>
+    <div class="tag"><span class="tag-dot"></span>Flutter</div>
+    <div class="tag"><span class="tag-dot"></span>Node.js</div>
+    <div class="tag"><span class="tag-dot"></span>Python / Django</div>
+    <div class="tag"><span class="tag-dot"></span>TypeScript</div>
+    <div class="tag"><span class="tag-dot"></span>PostgreSQL</div>
+    <div class="tag"><span class="tag-dot"></span>MongoDB</div>
+    <div class="tag"><span class="tag-dot"></span>Redis</div>
+    <div class="tag"><span class="tag-dot"></span>Docker</div>
+    <div class="tag"><span class="tag-dot"></span>AWS / VPS</div>
+    <div class="tag"><span class="tag-dot"></span>Figma</div>
+    <div class="tag"><span class="tag-dot"></span>Telegram Bot API</div>
+    <div class="tag"><span class="tag-dot"></span>Firebase</div>
+    <div class="tag"><span class="tag-dot"></span>Stripe / Payme</div>
+    <div class="tag"><span class="tag-dot"></span>GraphQL / REST</div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background:var(--bg2)">
+  <div class="sl2">Стоимость</div>
+  <h2 class="st">Честные цены<br>без скрытых платежей</h2>
+  <p class="ss">Фиксированная стоимость по договору. Никаких сюрпризов в середине проекта.</p>
+
+  <div class="price-grid reveal">
+    <div class="pcard">
+      <div class="pname">Старт</div>
+      <div class="pdesc">Для малого бизнеса и первого онлайн-присутствия</div>
+      <div class="pprice"><sup>от </sup>500$<small> / проект</small></div>
+      <ul class="pfeats">
+        <li>Лендинг или визитка</li>
+        <li>Адаптивный дизайн</li>
+        <li>Форма обратной связи</li>
+        <li>Telegram-уведомления</li>
+        <li>Базовое SEO</li>
+        <li>1 месяц поддержки</li>
+      </ul>
+      <a href="#contact" class="btn-o" style="width:100%;justify-content:center">Обсудить проект</a>
+    </div>
+
+    <div class="pcard featured">
+      <div class="pname">Бизнес</div>
+      <div class="pdesc">Для компаний, которым нужен серьёзный продукт</div>
+      <div class="pprice"><sup>от </sup>2000$<small> / проект</small></div>
+      <ul class="pfeats">
+        <li>Веб-приложение или мобилка</li>
+        <li>Авторский UI/UX дизайн</li>
+        <li>Личный кабинет / CRM</li>
+        <li>Интеграции с API</li>
+        <li>Telegram-бот в комплекте</li>
+        <li>3 месяца поддержки</li>
+        <li>Публикация в сторах</li>
+      </ul>
+      <a href="#contact" class="btn-p" style="width:100%;justify-content:center">Начать сейчас</a>
+    </div>
+
+    <div class="pcard">
+      <div class="pname">Корпоратив</div>
+      <div class="pdesc">Для крупных проектов с уникальными требованиями</div>
+      <div class="pprice">По запросу</div>
+      <ul class="pfeats">
+        <li>Любой масштаб и сложность</li>
+        <li>Выделенная команда</li>
+        <li>Собственная архитектура</li>
+        <li>SLA и гарантии uptime</li>
+        <li>Обучение персонала</li>
+        <li>12 месяцев поддержки</li>
+        <li>NDA по запросу</li>
+      </ul>
+      <a href="#contact" class="btn-o" style="width:100%;justify-content:center">Связаться</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="sl2">Вопросы и ответы</div>
+  <h2 class="st">Часто задаваемые<br>вопросы</h2>
+
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <div class="faq-q">Сколько времени занимает разработка сайта?<span class="faq-ico">+</span></div>
+      <div class="faq-a">Лендинг — 5–10 рабочих дней. Корпоративный сайт — 2–4 недели. Веб-приложение или мобильное приложение — от 1 до 4 месяцев, в зависимости от функционала. Точные сроки фиксируем в договоре.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Работаете ли вы с клиентами из других стран?<span class="faq-ico">+</span></div>
+      <div class="faq-a">Да, мы работаем с клиентами из Таджикистана, Узбекистана, Казахстана, России и других стран. Общение через Telegram, Zoom, WhatsApp. Договор и оплата — в удобном для вас формате.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Как происходит оплата?<span class="faq-ico">+</span></div>
+      <div class="faq-a">Работаем по предоплате 50% перед стартом, остаток — при сдаче проекта. Принимаем карты, переводы, наличные, криптовалюту. Всё фиксируется в договоре.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Есть ли гарантия после запуска?<span class="faq-ico">+</span></div>
+      <div class="faq-a">Да, даём гарантию на все проекты — от 1 до 12 месяцев в зависимости от тарифа. В течение гарантийного срока исправляем баги бесплатно. После — поддержка по договору.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Вы делаете дизайн или только разработку?<span class="faq-ico">+</span></div>
+      <div class="faq-a">Делаем всё под ключ: дизайн, разработку, тестирование, деплой и поддержку. Можем взять уже готовый дизайн от вашего дизайнера — без проблем.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Можно ли добавить функции после запуска?<span class="faq-ico">+</span></div>
+      <div class="faq-a">Конечно. Мы строим масштабируемые системы именно для этого. Новые функции добавляем быстро, так как уже знаем кодовую базу. Оцениваем доработки честно и по факту.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section id="contact">
+  <div class="cta-inner">
+    <div class="cta-left reveal">
+      <div class="sl2">Оставьте заявку</div>
+      <h2 class="st">Давайте создадим<br>ваш продукт</h2>
+      <p class="ss">Расскажите о проекте — мы ответим в течение нескольких часов и предложим решение.</p>
+
+      <div class="cta-why">
+        <div class="why-item">
+          <div class="why-icon">⚡</div>
+          <div class="why-text">
+            <strong>Быстрый старт</strong>
+            <p>Начинаем работу в течение 3 дней после подписания договора</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">💬</div>
+          <div class="why-text">
+            <strong>Постоянная связь</strong>
+            <p>Личный менеджер в Telegram — отвечаем в рабочее время за 30 минут</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🔒</div>
+          <div class="why-text">
+            <strong>Договор и NDA</strong>
+            <p>Официальный договор, фиксируем сроки, стоимость и результат</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🌍</div>
+          <div class="why-text">
+            <strong>Локальная экспертиза</strong>
+            <p>Понимаем рынок Центральной Азии: местные платёжные системы, аудитория, тренды</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-box reveal">
+      <div class="form-title">Заявка на проект</div>
+      <div class="form-sub">Заполните форму — мы свяжемся с вами в Telegram или по номеру. Поддержка: @tajcodelab_bot</div>
+
+      <div class="fg-row">
+        <div class="fg">
+          <label>Имя</label>
+          <input type="text" id="f-name" placeholder="Ваше имя"/>
+        </div>
+        <div class="fg">
+          <label>Телефон / Telegram</label>
+          <input type="text" id="f-phone" placeholder="+992 или @username"/>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label>Тип проекта</label>
+        <select id="f-type">
+          <option value="">Выберите тип проекта</option>
+          <option>Лендинг / Сайт-визитка</option>
+          <option>Корпоративный сайт</option>
+          <option>Мобильное приложение</option>
+          <option>Веб-приложение / CRM</option>
+          <option>Telegram-бот</option>
+          <option>Дизайн UI/UX</option>
+          <option>Другое</option>
+        </select>
+      </div>
+
+      <div class="fg">
+        <label>Бюджет</label>
+        <select id="f-budget">
+          <option value="">Ориентировочный бюджет</option>
+          <option>До 500$</option>
+          <option>500$ — 1 500$</option>
+          <option>1 500$ — 5 000$</option>
+          <option>5 000$+</option>
+          <option>Обсудим</option>
+        </select>
+      </div>
+
+      <div class="fg">
+        <label>Расскажите о проекте</label>
+        <textarea id="f-msg" rows="4" placeholder="Что хотите создать? Есть ли референсы, сроки, особые требования?"></textarea>
+      </div>
+
+      <button class="btn-p btn-submit" onclick="sendForm()">
+        Отправить заявку
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      </button>
+      <div id="form-msg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <a href="#" class="logo">TAJ<span>CODE</span> LAB</a>
+      <p>Студия IT-разработки в Таджикистане. Создаём приложения, сайты и цифровые продукты, которые работают.</p>
+      <div class="foot-socials">
+        <a class="fsoc" href="https://t.me/tajcode_lab" target="_blank" rel="noopener" title="Telegram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </a>
+        <a class="fsoc" href="mailto:info@tajcodelab.tj" title="Email">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </a>
+        <a class="fsoc" href="https://wa.me/992000000000" target="_blank" rel="noopener" title="WhatsApp">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="fcol">
+      <h4>Услуги</h4>
+      <ul>
+        <li><a href="#services">Мобильные приложения</a></li>
+        <li><a href="#services">Веб-сайты</a></li>
+        <li><a href="#services">Веб-приложения</a></li>
+        <li><a href="#services">Telegram-боты</a></li>
+        <li><a href="#services">UI/UX Дизайн</a></li>
+      </ul>
+    </div>
+
+    <div class="fcol">
+      <h4>Компания</h4>
+      <ul>
+        <li><a href="#process">Как работаем</a></li>
+        <li><a href="#pricing">Цены</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Контакты</a></li>
+      </ul>
+    </div>
+
+    <div class="fcol">
+      <h4>Контакты</h4>
+      <ul>
+        <li><a href="https://t.me/tajcode_lab">Telegram</a></li>
+        <li><a href="mailto:info@tajcodelab.tj">info@tajcodelab.tj</a></li>
+        <li><a href="tel:+992000000000">+992 00 000-00-00</a></li>
+        <li><a href="#">Душанбе, Таджикистан</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot-bottom">
+    <p>© 2025 <span>TAJCODE LAB</span>. Все права защищены.</p>
+    <p>Сделано с ❤️ в <span>Таджикистане</span></p>
+  </div>
+</footer>
+
+<script>
+  // NAV SCROLL
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // HAMBURGER
+  const hbg = document.getElementById('hbg');
+  const mobMenu = document.getElementById('mobMenu');
+  hbg.addEventListener('click', () => {
+    hbg.classList.toggle('open');
+    mobMenu.classList.toggle('open');
+  });
+  document.querySelectorAll('.mob-link').forEach(l => {
+    l.addEventListener('click', () => {
+      hbg.classList.remove('open');
+      mobMenu.classList.remove('open');
+    });
+  });
+
+  // SCROLL REVEAL
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // COUNTER ANIMATION
+  function animateCounter(el, target, suffix) {
+    let start = 0;
+    const duration = 1800;
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(ease * target) + (progress === 1 ? (suffix || '+') : '+');
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const statsObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        const target = parseInt(el.dataset.target);
+        const suffix = target === 98 ? '%' : '+';
+        animateCounter(el, target, suffix);
+        statsObs.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-target]').forEach(el => statsObs.observe(el));
+
+  
+  // SECURE CONTACT FORM
+  async function sendForm() {
+    const name   = document.getElementById('f-name').value.trim();
+    const phone  = document.getElementById('f-phone').value.trim();
+    const type   = document.getElementById('f-type').value;
+    const budget = document.getElementById('f-budget').value;
+    const msg    = document.getElementById('f-msg').value.trim();
+    const el     = document.getElementById('form-msg');
+
+    if (!name || !phone) {
+      el.className = 'err';
+      el.textContent = '⚠️ Укажите имя и контакт.';
+      return;
+    }
+
+    const btn = document.querySelector('.btn-submit');
+    btn.disabled = true;
+
+    try {
+    const res = await fetch('/api/contact', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name,
+    phone,
+    type,
+    budget,
+    message: msg
+  })
+});
+
+      const data = await res.json();
+
+      if (data.success) {
+        el.className = 'ok';
+        el.textContent = '✅ Заявка отправлена успешно!';
+        ['f-name','f-phone','f-msg'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('f-type').value = '';
+        document.getElementById('f-budget').value = '';
+      } else {
+        throw new Error(data.error || 'Ошибка');
+      }
+    } catch (err) {
+      console.error(err);
+      el.className = 'err';
+      el.textContent = '❌ Ошибка отправки. Напишите в @tajcodelab_bot';
+    } finally {
+      btn.disabled = false;
+    }
+  }
+</script>
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</body>
+</html>

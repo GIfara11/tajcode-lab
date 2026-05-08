@@ -1,0 +1,31 @@
+
+SECURE DEPLOY GUIDE
+
+Теперь BOT_TOKEN скрыт и не виден пользователям.
+
+Что изменено:
+- Telegram token удален из frontend
+- Добавлен secure backend API
+- Добавлены environment variables
+- Подготовлено для Vercel
+
+КАК ЗАПУСТИТЬ:
+
+1. Загрузите проект на Vercel
+2. Откройте Settings → Environment Variables
+3. Добавьте:
+   BOT_TOKEN = ваш токен бота
+   CHAT_ID = @tajcodelab_bot
+
+4. Deploy
+
+После этого:
+- токен никто не увидит
+- заявки работают безопасно
+- frontend защищен
+
+Структура:
+- index.html
+- api/contact.js
+- vercel.json
+- .env.example
