@@ -1,11 +1,27 @@
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ success: false });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
+  }
+
+  // КРИТИЧЕСКАЯ ПРОВЕРКА: переменные окружения должны быть установлены
+  if (!process.env.BOT_TOKEN || !process.env.CHAT_ID) {
+    console.error('❌ Missing environment variables: BOT_TOKEN or CHAT_ID');
+    return res.status(500).json({ 
+      success: false, 
+      error: 'Server configuration error. Contact support.' 
+    });
   }
 
   try {
     const { name, phone, type, budget, message } = req.body;
+
+    // Валидация входных данных
+    if (!name || !phone) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Name and phone are required' 
+      });
+    }
 
     const text = `
 🚀 Новая заявка — TAJCODE LAB
@@ -36,19 +52,21 @@ ${message || 'не указано'}
     const data = await response.json();
 
     if (!data.ok) {
-      throw new Error('Telegram API error');
+      console.error('❌ Telegram API error:', data.description);
+      throw new Error(`Telegram API error: ${data.description || 'Unknown error'}`);
     }
 
     return res.status(200).json({
-      success: true
+      success: true,
+      message: 'Заявка отправлена успешно!'
     });
 
   } catch (error) {
-    console.error('Contact form error:', error.message);
+    console.error('❌ Contact form error:', error.message);
 
     return res.status(500).json({
       success: false,
-      error: 'Server error: ' + (error.message || 'Unknown error')
+      error: 'Ошибка отправки. Попробуйте позже или напишите в @tajcodelab_bot'
     });
   }
 }
