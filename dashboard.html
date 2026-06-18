@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050a0e">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Аналитика — TAJCODE LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050a0e;
+      --surface: #091118;
+      --surface-2: #0d1821;
+      --surface-3: #10212c;
+      --text: #eaf5fa;
+      --muted: #7893a2;
+      --accent: #00e5ff;
+      --accent-soft: rgba(0, 229, 255, .1);
+      --gold: #f0c040;
+      --success: #43d18d;
+      --danger: #ff6874;
+      --border: rgba(141, 188, 207, .14);
+      --shadow: 0 18px 60px rgba(0, 0, 0, .25);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { color-scheme: dark; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at 75% -20%, rgba(0, 229, 255, .07), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+    }
+    button, input, select { font: inherit; }
+    button, select { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid rgba(0, 229, 255, .32);
+      outline-offset: 2px;
+    }
+    .icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .app { min-height: 100dvh; display: grid; grid-template-columns: 250px minmax(0, 1fr); }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100dvh;
+      padding: 28px 20px;
+      border-right: 1px solid var(--border);
+      background: rgba(5, 10, 14, .86);
+      backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--text);
+      text-decoration: none;
+      font-family: "Syne", sans-serif;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      padding: 0 8px;
+    }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(0, 229, 255, .3);
+      border-radius: 10px;
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .brand span { color: var(--accent); }
+    .nav-label {
+      margin: 42px 10px 10px;
+      color: #587181;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .nav-list { display: grid; gap: 6px; }
+    .nav-item {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 13px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 180ms ease;
+    }
+    .nav-item:hover { color: var(--text); background: rgba(255, 255, 255, .025); }
+    .nav-item.active {
+      border-color: rgba(0, 229, 255, .16);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .bot-card {
+      margin-top: auto;
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: linear-gradient(145deg, rgba(0, 229, 255, .075), rgba(255, 255, 255, .018));
+    }
+    .bot-status { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); box-shadow: 0 0 0 4px rgba(120, 147, 162, .1); }
+    .status-dot.online { background: var(--success); box-shadow: 0 0 0 4px rgba(67, 209, 141, .1); }
+    .bot-card p { color: var(--muted); font-size: 12px; line-height: 1.55; margin: 11px 0 14px; }
+    .small-button {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .025);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      transition: 180ms ease;
+    }
+    .small-button:hover { border-color: rgba(0, 229, 255, .35); color: var(--accent); }
+
+    .main { min-width: 0; padding: 30px clamp(20px, 3.4vw, 52px) 54px; }
+    .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 30px; }
+    .eyebrow { margin: 0 0 7px; color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 0; font-family: "Syne", sans-serif; font-size: clamp(28px, 4vw, 42px); line-height: 1; letter-spacing: -.04em; }
+    .subtitle { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
+    .actions { display: flex; align-items: center; gap: 10px; }
+    .select-wrap { position: relative; }
+    .select-wrap .icon { position: absolute; left: 13px; top: 50%; width: 17px; height: 17px; color: var(--muted); transform: translateY(-50%); pointer-events: none; }
+    select {
+      min-height: 46px;
+      padding: 0 38px 0 39px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      appearance: none;
+      background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237893a2' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 13px center;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .icon-button {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--muted);
+      transition: 180ms ease;
+    }
+    .icon-button:hover { color: var(--accent); border-color: rgba(0, 229, 255, .35); }
+    .icon-button.loading .icon { animation: spin .8s linear infinite; }
+
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .metric-card {
+      position: relative;
+      min-height: 158px;
+      padding: 21px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(13, 24, 33, .96), rgba(9, 17, 24, .9));
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .metric-card::after { content: ""; position: absolute; inset: auto -30px -50px auto; width: 120px; height: 120px; border-radius: 50%; background: rgba(0, 229, 255, .045); filter: blur(4px); }
+    .metric-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .metric-label { color: var(--muted); font-size: 13px; font-weight: 500; }
+    .metric-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; color: var(--accent); background: var(--accent-soft); }
+    .metric-icon .icon { width: 18px; height: 18px; }
+    .metric-value { margin-top: 24px; font-family: "Syne", sans-serif; font-size: clamp(28px, 3vw, 38px); font-weight: 700; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+    .metric-foot { margin-top: 6px; color: #5f7d8c; font-size: 12px; }
+
+    .content-grid { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(290px, .75fr); gap: 14px; margin-top: 14px; }
+    .panel { border: 1px solid var(--border); border-radius: var(--radius); background: rgba(9, 17, 24, .9); box-shadow: var(--shadow); }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 21px 22px 0; }
+    .panel-title { margin: 0; font-family: "Syne", sans-serif; font-size: 17px; letter-spacing: -.02em; }
+    .panel-caption { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .legend { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
+    .legend::before { content: ""; width: 18px; height: 3px; border-radius: 2px; background: var(--accent); }
+    .chart-wrap { position: relative; height: 310px; padding: 26px 18px 18px; }
+    #trafficChart { width: 100%; height: 100%; overflow: visible; }
+    .chart-grid { stroke: rgba(141, 188, 207, .1); stroke-width: 1; }
+    .chart-line { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(0, 229, 255, .3)); }
+    .chart-area { fill: url(#areaGradient); }
+    .chart-point { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+    .chart-label { fill: var(--muted); font: 11px "DM Sans", sans-serif; }
+    .chart-empty { color: var(--muted); height: 100%; display: grid; place-items: center; font-size: 13px; }
+
+    .commands { padding: 20px 22px 22px; display: grid; gap: 10px; }
+    .command {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px 10px 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .018);
+    }
+    .command code { color: var(--accent); font-size: 13px; }
+    .command span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .copy-btn { width: 38px; height: 38px; flex: 0 0 38px; display: grid; place-items: center; border: 0; border-radius: 9px; background: rgba(0, 229, 255, .08); color: var(--accent); }
+    .copy-btn .icon { width: 17px; height: 17px; }
+
+    .tables { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+    .table-wrap { padding: 14px 22px 20px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { padding: 10px 0; border-bottom: 1px solid var(--border); color: #587181; font-size: 10px; letter-spacing: .1em; text-align: left; text-transform: uppercase; }
+    th:last-child, td:last-child { text-align: right; }
+    td { padding: 14px 0; border-bottom: 1px solid rgba(141, 188, 207, .08); color: #c7dce6; }
+    tr:last-child td { border-bottom: 0; }
+    td:last-child { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .empty-row td { padding: 28px 0; color: var(--muted); text-align: center !important; }
+
+    .login {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(2, 5, 7, .83);
+      backdrop-filter: blur(12px);
+    }
+    .login[hidden] { display: none; }
+    .login-card { width: min(420px, 100%); padding: 30px; border: 1px solid var(--border); border-radius: 22px; background: var(--surface); box-shadow: 0 24px 80px rgba(0, 0, 0, .55); }
+    .login-card .brand { padding: 0; margin-bottom: 32px; }
+    .login-card h2 { margin: 0; font-family: "Syne", sans-serif; font-size: 25px; }
+    .login-card p { margin: 10px 0 24px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .field label { display: block; margin-bottom: 8px; color: #aec4cf; font-size: 12px; font-weight: 600; }
+    .field input { width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid var(--border); border-radius: 11px; background: var(--bg); color: var(--text); }
+    .login-submit { width: 100%; min-height: 48px; margin-top: 13px; border: 0; border-radius: 11px; background: var(--accent); color: #031015; font-weight: 700; }
+    .login-error { min-height: 18px; margin-top: 10px !important; color: var(--danger) !important; }
+    .toast { position: fixed; right: 22px; bottom: 22px; z-index: 110; max-width: min(380px, calc(100vw - 44px)); padding: 13px 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-3); color: var(--text); box-shadow: var(--shadow); font-size: 13px; transform: translateY(20px); opacity: 0; pointer-events: none; transition: 200ms ease; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .mobile-menu { display: none; }
+    .skeleton { position: relative; color: transparent !important; overflow: hidden; border-radius: 7px; background: rgba(255, 255, 255, .04); }
+    .skeleton::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .06), transparent); transform: translateX(-100%); animation: shimmer 1.4s infinite; }
+
+    @keyframes shimmer { to { transform: translateX(100%); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+    @media (max-width: 1080px) {
+      .app { grid-template-columns: 82px minmax(0, 1fr); }
+      .sidebar { padding-inline: 14px; }
+      .brand { justify-content: center; }
+      .brand > span, .nav-label, .nav-item span, .bot-card { display: none; }
+      .nav-item { justify-content: center; padding: 0; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .app { display: block; }
+      .sidebar { position: fixed; left: 0; top: 0; width: min(280px, 86vw); height: 100dvh; padding: 24px 18px; transform: translateX(-105%); transition: transform 220ms ease; box-shadow: 24px 0 70px rgba(0, 0, 0, .5); }
+      .sidebar.open { transform: translateX(0); }
+      .brand { justify-content: flex-start; }
+      .brand > span, .nav-label, .nav-item span, .bot-card { display: initial; }
+      .nav-item { justify-content: flex-start; padding: 0 13px; }
+      .bot-card { display: block; }
+      .mobile-menu { display: grid; }
+      .main { padding: 22px 16px 44px; }
+      .topbar { align-items: center; }
+      .topbar-copy { flex: 1; }
+      .subtitle { display: none; }
+      .actions .select-wrap { position: absolute; top: 86px; left: 16px; right: 16px; }
+      .actions select { width: 100%; }
+      .metrics { margin-top: 76px; }
+      .content-grid, .tables { grid-template-columns: 1fr; }
+      .chart-wrap { height: 265px; padding-inline: 10px; }
+    }
+    @media (max-width: 500px) {
+      .metrics { grid-template-columns: 1fr; }
+      .metric-card { min-height: 136px; }
+      .metric-value { margin-top: 17px; }
+      .panel-head { align-items: flex-start; }
+      .legend { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/" aria-label="TAJCODE LAB — на сайт">
+        <span class="brand-mark"><svg class="icon" viewBox="0 0 24 24"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></span>
+        <span>TAJCODE<span>.LAB</span></span>
+      </a>
+      <p class="nav-label">Управление</p>
+      <nav class="nav-list" aria-label="Разделы аналитики">
+        <a class="nav-item active" href="#overview"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Обзор</span></a>
+        <a class="nav-item" href="#traffic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 16 4-5 4 3 5-7"/></svg><span>Трафик</span></a>
+        <a class="nav-item" href="#sources"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg><span>Источники</span></a>
+        <a class="nav-item" href="#telegram"><svg class="icon" viewBox="0 0 24 24"><path d="m21 3-7.5 18-4.3-7.7L3 10.5 21 3Z"/><path d="m9.2 13.3 5.1-4.7"/></svg><span>Telegram</span></a>
+      </nav>
+      <div class="bot-card">
+        <div class="bot-status"><span class="status-dot" id="botDot"></span><span id="botStatus">Проверяем бота</span></div>
+        <p>Webhook принимает команды и возвращает ту же статистику, что видна здесь.</p>
+        <button class="small-button" id="setupWebhook" type="button">Подключить webhook</button>
+      </div>
+    </aside>
+
+    <main class="main" id="overview">
+      <header class="topbar">
+        <div class="topbar-copy">
+          <p class="eyebrow">Аналитика сайта</p>
+          <h1>Обзор трафика</h1>
+          <p class="subtitle" id="generatedAt">Данные загружаются с сервера</p>
+        </div>
+        <div class="actions">
+          <div class="select-wrap">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg>
+            <select id="rangeSelect" aria-label="Период статистики">
+              <option value="1">Сегодня</option>
+              <option value="7" selected>Последние 7 дней</option>
+              <option value="30">Последние 30 дней</option>
+              <option value="90">Последние 90 дней</option>
+            </select>
+          </div>
+          <button class="icon-button" id="refreshButton" type="button" aria-label="Обновить данные"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11a8.1 8.1 0 1 0 2 5.3"/><path d="M20 4v7h-7"/></svg></button>
+          <button class="icon-button mobile-menu" id="menuButton" type="button" aria-label="Открыть меню" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        </div>
+      </header>
+
+      <section class="metrics" aria-label="Ключевые показатели">
+        <article class="metric-card">
+          <div class="metric-head"><span class="metric-label">Просмотры</span><span class="metric-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg></span></div>
+          <div class="metric-value skeleton" data-metric="views">000</div>
+          <div class="metric-foot">Все загрузки страниц</div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-head"><span class="metric-label">Визиты</span><span class="metric-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2v6l4-4M5 13a7 7 0 1 0 2-5"/></svg></span></div>
+          <div class="metric-value skeleton" data-metric="visits">000</div>
+          <div class="metric-foot">Уникальные сессии</div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-head"><span class="metric-label">Пользователи</span><span class="metric-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></span></div>
+          <div class="metric-value skeleton" data-metric="users">000</div>
+          <div class="metric-foot">За выбранный период</div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-head"><span class="metric-label">Конверсия</span><span class="metric-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span></div>
+          <div class="metric-value skeleton" data-metric="conversion">0%</div>
+          <div class="metric-foot"><span data-metric="leads">0</span> заявок</div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel" id="traffic">
+          <div class="panel-head">
+            <div><h2 class="panel-title">Динамика трафика</h2><p class="panel-caption">Просмотры по дням, часовой пояс Душанбе</p></div>
+            <div class="legend">Просмотры</div>
+          </div>
+          <div class="chart-wrap" id="chartWrap"><svg id="trafficChart" role="img" aria-label="График просмотров сайта"></svg></div>
+        </article>
+        <article class="panel" id="telegram">
+          <div class="panel-head">
+            <div><h2 class="panel-title">Команды бота</h2><p class="panel-caption">Отправь команду в разрешённом чате</p></div>
+          </div>
+          <div class="commands">
+            <div class="command"><div><code>/today</code><span>Статистика за сегодня</span></div><button class="copy-btn" data-copy="/today" type="button" aria-label="Скопировать команду /today"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
+            <div class="command"><div><code>/stats</code><span>Сводка за 7 дней</span></div><button class="copy-btn" data-copy="/stats" type="button" aria-label="Скопировать команду /stats"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
+            <div class="command"><div><code>/stats 30d</code><span>Сводка за 30 дней</span></div><button class="copy-btn" data-copy="/stats 30d" type="button" aria-label="Скопировать команду /stats 30d"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="tables" id="sources">
+        <article class="panel">
+          <div class="panel-head"><div><h2 class="panel-title">Источники</h2><p class="panel-caption">Откуда приходят посетители</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Источник</th><th>Переходы</th></tr></thead><tbody id="sourcesBody"></tbody></table></div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><div><h2 class="panel-title">Популярные страницы</h2><p class="panel-caption">Что смотрят чаще всего</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Страница</th><th>Просмотры</th></tr></thead><tbody id="pagesBody"></tbody></table></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <section class="login" id="login" aria-labelledby="loginTitle">
+    <form class="login-card" id="loginForm">
+      <a class="brand" href="/">
+        <span class="brand-mark"><svg class="icon" viewBox="0 0 24 24"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></span>
+        <span>TAJCODE<span>.LAB</span></span>
+      </a>
+      <h2 id="loginTitle">Доступ к аналитике</h2>
+      <p>Введи ключ из переменной <code>DASHBOARD_KEY</code>. Он хранится только в этом браузере.</p>
+      <div class="field"><label for="dashboardKey">Ключ доступа</label><input id="dashboardKey" name="dashboardKey" type="password" autocomplete="current-password" required></div>
+      <button class="login-submit" type="submit">Открыть дашборд</button>
+      <p class="login-error" id="loginError" role="alert"></p>
+    </form>
+  </section>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const state = {
+      key: localStorage.getItem('tajcode_dashboard_key') || '',
+      range: 7,
+      loading: false
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const number = new Intl.NumberFormat('ru-RU');
+    const login = $('#login');
+    const loginForm = $('#loginForm');
+    const loginError = $('#loginError');
+    const refreshButton = $('#refreshButton');
+    const rangeSelect = $('#rangeSelect');
+    const toast = $('#toast');
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    async function api(path, options = {}) {
+      const response = await fetch(path, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-dashboard-key': state.key,
+          ...(options.headers || {})
+        }
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const error = new Error(payload.error || `Ошибка ${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
+      return payload;
+    }
+
+    function setLoading(value) {
+      state.loading = value;
+      refreshButton.disabled = value;
+      refreshButton.classList.toggle('loading', value);
+    }
+
+    function renderMetric(name, value) {
+      document.querySelectorAll(`[data-metric="${name}"]`).forEach((element) => {
+        element.classList.remove('skeleton');
+        element.textContent = value;
+      });
+    }
+
+    function renderTable(target, rows) {
+      target.innerHTML = '';
+      if (!rows.length) {
+        target.innerHTML = '<tr class="empty-row"><td colspan="2">Пока нет данных</td></tr>';
+        return;
+      }
+      rows.forEach((row) => {
+        const tr = document.createElement('tr');
+        const name = document.createElement('td');
+        const count = document.createElement('td');
+        name.textContent = row.name;
+        count.textContent = number.format(row.count);
+        tr.append(name, count);
+        target.appendChild(tr);
+      });
+    }
+
+    function renderChart(series) {
+      const svg = $('#trafficChart');
+      const width = 760;
+      const height = 260;
+      const padding = { top: 18, right: 18, bottom: 36, left: 42 };
+      const innerWidth = width - padding.left - padding.right;
+      const innerHeight = height - padding.top - padding.bottom;
+      const max = Math.max(...series.map((item) => item.views), 1);
+      const steps = 4;
+      const x = (index) => padding.left + (series.length === 1 ? innerWidth / 2 : index * innerWidth / (series.length - 1));
+      const y = (value) => padding.top + innerHeight - (value / max) * innerHeight;
+
+      if (!series.length) {
+        svg.outerHTML = '<div class="chart-empty" id="trafficChart">Нет данных за выбранный период</div>';
+        return;
+      }
+
+      const line = series.map((item, index) => `${index ? 'L' : 'M'} ${x(index)} ${y(item.views)}`).join(' ');
+      const area = `${line} L ${x(series.length - 1)} ${padding.top + innerHeight} L ${x(0)} ${padding.top + innerHeight} Z`;
+      const labelsEvery = Math.max(1, Math.ceil(series.length / 7));
+      let markup = '<defs><linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00e5ff" stop-opacity=".2"/><stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/></linearGradient></defs>';
+
+      for (let step = 0; step <= steps; step += 1) {
+        const value = Math.round(max * (steps - step) / steps);
+        const gridY = padding.top + innerHeight * step / steps;
+        markup += `<line class="chart-grid" x1="${padding.left}" y1="${gridY}" x2="${width - padding.right}" y2="${gridY}"/><text class="chart-label" x="${padding.left - 10}" y="${gridY + 4}" text-anchor="end">${value}</text>`;
+      }
+      markup += `<path class="chart-area" d="${area}"/><path class="chart-line" d="${line}"/>`;
+      series.forEach((item, index) => {
+        if (index % labelsEvery === 0 || index === series.length - 1) {
+          const label = new Date(`${item.date}T00:00:00`).toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' });
+          markup += `<text class="chart-label" x="${x(index)}" y="${height - 9}" text-anchor="middle">${label}</text>`;
+        }
+        markup += `<circle class="chart-point" cx="${x(index)}" cy="${y(item.views)}" r="3.5"><title>${item.date}: ${item.views}</title></circle>`;
+      });
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      svg.innerHTML = markup;
+    }
+
+    function render(data) {
+      renderMetric('views', number.format(data.metrics.views));
+      renderMetric('visits', number.format(data.metrics.visits));
+      renderMetric('users', number.format(data.metrics.users));
+      renderMetric('leads', number.format(data.metrics.leads));
+      renderMetric('conversion', `${data.metrics.conversion}%`);
+      renderTable($('#sourcesBody'), data.sources);
+      renderTable($('#pagesBody'), data.pages);
+      renderChart(data.series);
+      $('#generatedAt').textContent = `Обновлено ${new Date(data.generatedAt).toLocaleString('ru-RU')}`;
+      $('#botDot').classList.toggle('online', data.botConfigured);
+      $('#botStatus').textContent = data.botConfigured ? 'Бот настроен' : 'Бот не настроен';
+    }
+
+    async function loadStats({ initial = false } = {}) {
+      if (state.loading || !state.key) return;
+      setLoading(true);
+      try {
+        const payload = await api(`/api/stats?range=${state.range}`);
+        render(payload.data);
+        login.hidden = true;
+        loginError.textContent = '';
+      } catch (error) {
+        if (error.status === 401) {
+          localStorage.removeItem('tajcode_dashboard_key');
+          state.key = '';
+          login.hidden = false;
+          loginError.textContent = initial ? 'Введи ключ доступа.' : 'Ключ неверный.';
+          setTimeout(() => $('#dashboardKey').focus(), 50);
+        } else {
+          showToast(error.message);
+          if (initial) login.hidden = false;
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      state.key = $('#dashboardKey').value.trim();
+      if (!state.key) return;
+      localStorage.setItem('tajcode_dashboard_key', state.key);
+      loginError.textContent = '';
+      await loadStats();
+    });
+    rangeSelect.addEventListener('change', () => {
+      state.range = Number(rangeSelect.value);
+      loadStats();
+    });
+    refreshButton.addEventListener('click', () => loadStats());
+    $('#setupWebhook').addEventListener('click', async () => {
+      try {
+        const payload = await api('/api/setup-webhook', { method: 'POST' });
+        showToast(`Webhook подключён: ${payload.webhookUrl}`);
+        loadStats();
+      } catch (error) {
+        showToast(error.message);
+      }
+    });
+    document.querySelectorAll('[data-copy]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(button.dataset.copy);
+        showToast(`Скопировано: ${button.dataset.copy}`);
+      });
+    });
+    $('#menuButton').addEventListener('click', () => {
+      const open = $('#sidebar').classList.toggle('open');
+      $('#menuButton').setAttribute('aria-expanded', String(open));
+    });
+    document.querySelectorAll('.nav-item').forEach((item) => item.addEventListener('click', () => $('#sidebar').classList.remove('open')));
+
+    if (state.key) {
+      login.hidden = true;
+      loadStats({ initial: true });
+    } else {
+      login.hidden = false;
+      setTimeout(() => $('#dashboardKey').focus(), 50);
+    }
+  </script>
+</body>
+</html>
