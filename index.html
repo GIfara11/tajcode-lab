@@ -8,6 +8,7 @@
   <meta name="robots" content="index, follow"/>
 
   <title>TAJCODE LAB — IT-разработка в Центральной Азии</title>
+  <link rel="canonical" href="https://tajcode-lab.ru/"/>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2304090d'/%3E%3Cpath d='M24 20 12 32l12 12M40 20l12 12-12 12' stroke='%2300e5ff' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"/>
   <meta name="description" content="TAJCODE LAB — студия разработки мобильных приложений, веб-сайтов и IT-продуктов в Таджикистане и Центральной Азии."/>
 
@@ -15,10 +16,15 @@
   <meta property="og:site_name" content="TAJCODE LAB"/>
   <meta property="og:title" content="TAJCODE LAB — IT-разработка в Центральной Азии"/>
   <meta property="og:description" content="Мобильные приложения, веб-сайты, Telegram-боты и IT-продукты под ключ — от идеи до запуска."/>
+  <meta property="og:url" content="https://tajcode-lab.ru/"/>
+  <meta property="og:image" content="https://tajcode-lab.ru/og-image.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
   <meta property="og:locale" content="ru_RU"/>
   <meta name="twitter:card" content="summary"/>
   <meta name="twitter:title" content="TAJCODE LAB — IT-разработка в Центральной Азии"/>
   <meta name="twitter:description" content="Мобильные приложения, веб-сайты, Telegram-боты и IT-продукты под ключ."/>
+  <meta name="twitter:image" content="https://tajcode-lab.ru/og-image.png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -300,6 +306,206 @@
     .tg-float:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 8px 36px rgba(0,229,255,.6)}
     @keyframes popIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
     .tg-float svg{width:26px;height:26px;fill:var(--bg)}
+
+    /* 2026 EDITORIAL-TECH REDESIGN */
+    :root{
+      --bg:#05090c;
+      --bg2:#081016;
+      --bg3:#0c171e;
+      --surface:#0b141a;
+      --surface-2:#101d25;
+      --accent:#5cecff;
+      --accent-strong:#00d5ee;
+      --gold:#e7bd61;
+      --text:#f2f7f9;
+      --muted:#8ca3ae;
+      --muted-strong:#b7c8cf;
+      --border:rgba(177,219,231,.13);
+      --border-strong:rgba(92,236,255,.28);
+      --radius-sm:12px;
+      --radius:20px;
+      --radius-lg:30px;
+      --shadow:0 24px 80px rgba(0,0,0,.28);
+    }
+    body{background:var(--bg);font-size:16px;line-height:1.6}
+    a,button,select{touch-action:manipulation}
+    body::after{opacity:.16}
+    .grid-bg{opacity:.38;background-size:72px 72px}
+    nav{height:76px;padding:0 max(24px,calc((100vw - 1240px)/2));background:rgba(5,9,12,.7);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.04)}
+    nav.scrolled{height:64px;padding:0 max(24px,calc((100vw - 1240px)/2));background:rgba(5,9,12,.92)}
+    .logo{font-size:1.28rem;letter-spacing:-.045em}
+    .nav-links{gap:1.8rem}
+    .nav-links a{font-size:.73rem;color:#91a6af}
+    .nav-cta{padding:11px 20px!important;border-radius:999px!important;box-shadow:0 0 0 1px rgba(92,236,255,.12)}
+    .mob-menu{top:64px;padding:12px 24px 26px;background:rgba(5,9,12,.98)}
+
+    section{width:min(100%,1360px);margin-inline:auto;padding:128px clamp(24px,6vw,80px)}
+    #process,#pricing,#contact{width:100%;max-width:none;padding-inline:max(24px,calc((100vw - 1200px)/2))}
+    .sl2{font-size:.68rem;color:var(--accent);letter-spacing:.2em;margin-bottom:20px}
+    .sl2::before{width:34px;background:var(--accent)}
+    .st{max-width:780px;font-size:clamp(2.35rem,5vw,4.8rem);line-height:.98;letter-spacing:-.055em;margin-bottom:24px}
+    .ss{max-width:650px;color:var(--muted);font-size:1.03rem;line-height:1.75}
+
+    .hero{width:100%;max-width:none;min-height:100svh;padding:132px max(24px,calc((100vw - 1240px)/2)) 72px;text-align:left;display:block;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(5,9,12,.15),transparent 40%,rgba(5,9,12,.1))}
+    .hero-glow{position:absolute;width:700px;height:700px;right:-180px;top:-180px;border-radius:50%;background:radial-gradient(circle,rgba(92,236,255,.11),rgba(92,236,255,.025) 38%,transparent 68%);filter:blur(12px);pointer-events:none}
+    .hero-layout{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(390px,.72fr);align-items:center;gap:clamp(48px,7vw,110px);max-width:1240px;margin:0 auto}
+    .hero-copy{min-width:0}
+    .hero-badge{display:inline-flex;margin:0 0 30px;padding:9px 15px;border-radius:999px;background:rgba(92,236,255,.07);border-color:rgba(92,236,255,.2);font-size:.68rem;opacity:1;animation:none}
+    .hero h1{margin:0 0 28px;font-size:clamp(3.35rem,6.6vw,7.1rem);line-height:.88;letter-spacing:-.065em;opacity:1;animation:none;text-wrap:balance}
+    .hero h1 span{color:var(--accent)}
+    .hero-sub{max-width:650px;margin:0 0 38px;color:var(--muted-strong);font-size:clamp(1rem,1.5vw,1.18rem);line-height:1.68;opacity:1;animation:none}
+    .hero-btns{justify-content:flex-start;margin:0;gap:12px;opacity:1;animation:none}
+    .btn-p,.btn-o{min-height:52px;padding:0 28px;border-radius:999px;font-size:.85rem;transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease}
+    .btn-p{background:var(--accent);color:#031015}
+    .btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,213,238,.2)}
+    .btn-o{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.025)}
+    .btn-o:hover{transform:translateY(-2px);background:rgba(255,255,255,.055)}
+    .hero-proof{display:flex;align-items:stretch;gap:0;margin-top:54px;border-top:1px solid var(--border);max-width:650px}
+    .hero-proof>div{display:flex;align-items:center;gap:12px;min-width:0;padding:22px 28px 0 0;margin-right:28px;border-right:1px solid var(--border)}
+    .hero-proof>div:last-child{border-right:0;margin-right:0;padding-right:0}
+    .hero-proof strong{color:var(--accent);font-family:'Syne',sans-serif;font-size:.68rem;letter-spacing:.1em}
+    .hero-proof span{color:var(--muted);font-size:.74rem;line-height:1.35;text-transform:uppercase;letter-spacing:.06em}
+
+    .solution-card{position:relative;padding:26px;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);background:linear-gradient(145deg,rgba(16,29,37,.94),rgba(7,14,19,.96));box-shadow:var(--shadow);overflow:hidden;scroll-margin-top:96px}
+    .solution-card::before{content:'';position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.8}
+    .solution-card::after{content:'';position:absolute;width:180px;height:180px;right:-70px;bottom:-90px;border-radius:50%;background:rgba(92,236,255,.06);filter:blur(10px);pointer-events:none}
+    .solution-head{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:26px}
+    .solution-kicker{display:block;margin-bottom:6px;color:var(--accent);font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+    .solution-head h2{margin:0;font-family:'Syne',sans-serif;font-size:1.45rem;line-height:1.15;letter-spacing:-.035em}
+    .solution-status{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:.7rem;white-space:nowrap}
+    .solution-status i{width:7px;height:7px;border-radius:50%;background:#4ddf91;box-shadow:0 0 0 4px rgba(77,223,145,.1)}
+    .solution-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+    .solution-option{min-height:46px;padding:0 14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025);color:var(--muted-strong);font-size:.78rem;font-weight:600;text-align:left;transition:.2s ease}
+    .solution-option:hover{border-color:rgba(92,236,255,.25);color:var(--text)}
+    .solution-option.active{border-color:var(--border-strong);background:rgba(92,236,255,.09);color:var(--accent)}
+    .solution-result{position:relative;padding:20px;margin-bottom:12px;border:1px solid var(--border);border-radius:16px;background:rgba(3,8,11,.42)}
+    .solution-main>span,.solution-meta span{display:block;color:#647f8b;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+    .solution-main strong{display:block;margin:7px 0 7px;font-family:'Syne',sans-serif;font-size:1.08rem}
+    .solution-main p{min-height:44px;margin:0;color:var(--muted);font-size:.78rem;line-height:1.5}
+    .solution-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+    .solution-meta strong{display:block;margin-top:5px;color:var(--text);font-size:.8rem}
+    .solution-cta{position:relative;z-index:1;width:100%;min-height:50px;display:flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:13px;background:var(--accent);color:#031015;font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;transition:transform .2s ease,box-shadow .2s ease}
+    .solution-cta:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,213,238,.17)}
+    .solution-note{position:relative;z-index:1;margin:11px 0 0;color:#617985;font-size:.65rem;text-align:center}
+
+    .mq{padding:14px 0;background:#071016;border-color:var(--border)}
+    .mi{padding:0 34px;color:#718b97;font-size:.67rem}
+    .mi b{margin-right:8px;color:var(--accent)}
+
+    .svc-grid{grid-template-columns:repeat(12,1fr);gap:12px;margin-top:64px;background:transparent;border:0;border-radius:0;overflow:visible}
+    .svc{grid-column:span 4;min-height:310px;padding:30px;border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(145deg,var(--surface),rgba(8,16,22,.84));transition:transform .25s ease,border-color .25s ease,background .25s ease}
+    .svc:nth-child(1),.svc:nth-child(4){grid-column:span 7}
+    .svc:nth-child(2),.svc:nth-child(3){grid-column:span 5}
+    .svc:nth-child(5),.svc:nth-child(6){grid-column:span 6}
+    .svc::before{height:1px}
+    .svc:hover{transform:translateY(-5px);border-color:var(--border-strong);background:var(--surface-2)}
+    .svc-bg{top:24px;right:26px;color:rgba(92,236,255,.07);font-size:3rem}
+    .svc-icon{width:48px;height:48px;border-radius:14px;margin-bottom:54px}
+    .svc-title{font-size:1.22rem;letter-spacing:-.02em}
+    .svc-desc{max-width:540px;color:var(--muted);font-size:.92rem;line-height:1.75}
+
+    #process{background:linear-gradient(180deg,var(--bg2),#071017)}
+    .proc-grid{grid-template-columns:repeat(3,1fr);gap:12px;margin-top:64px}
+    .proc-grid::before{display:none}
+    .step{position:relative;min-height:250px;padding:28px;text-align:left;border:1px solid var(--border);border-radius:var(--radius);background:rgba(255,255,255,.018)}
+    .step-n{width:auto;height:auto;display:block;margin:0 0 54px;border:0;background:none;color:var(--accent);font-size:.72rem;letter-spacing:.12em}
+    .step:hover .step-n{background:none;color:var(--accent);box-shadow:none}
+    .step-title{font-size:1.02rem}
+    .step-desc{color:var(--muted);font-size:.85rem;line-height:1.7}
+
+    .stack-flex{gap:9px;margin-top:50px}
+    .tag{min-height:45px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.025);color:var(--muted-strong);font-size:.78rem}
+    .tag:hover{transform:none;border-color:var(--border-strong);background:rgba(92,236,255,.07)}
+
+    .price-grid{gap:12px;margin-top:64px}
+    .price-card{padding:30px;border-radius:var(--radius);background:rgba(8,16,22,.86);border-color:var(--border)}
+    .price-card.featured{transform:none;background:linear-gradient(155deg,rgba(92,236,255,.09),rgba(8,16,22,.95));border-color:var(--border-strong);box-shadow:var(--shadow)}
+    .price-card.featured:hover{transform:translateY(-5px)}
+    .price-card:hover{transform:translateY(-5px);border-color:var(--border-strong)}
+    .price-name{font-size:1.04rem}
+    .price-val{font-size:2.35rem;letter-spacing:-.06em}
+    .price-feats li{font-size:.86rem;color:var(--muted-strong)}
+
+    #faq{display:grid;grid-template-columns:minmax(260px,.62fr) minmax(0,1fr);column-gap:clamp(50px,8vw,120px);align-items:start}
+    #faq>.sl2,#faq>.st{grid-column:1}
+    #faq>.st{font-size:clamp(2.5rem,4vw,4.2rem)}
+    .faq-list{grid-column:2;grid-row:1/4;margin-top:0;max-width:none;gap:8px}
+    .faq-item{border-radius:14px;background:var(--surface);border-color:var(--border)}
+    .faq-q{min-height:72px;padding:18px 20px;font-size:.9rem}
+    .faq-a{font-size:.88rem}
+
+    #contact{background:
+      radial-gradient(circle at 10% 20%,rgba(92,236,255,.065),transparent 34rem),
+      var(--bg2)}
+    .cta-inner{max-width:1200px;margin:auto;grid-template-columns:minmax(0,.85fr) minmax(440px,.72fr);gap:clamp(54px,8vw,120px)}
+    .cta-why{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:46px}
+    .why-item{padding-top:18px;border-top:1px solid var(--border)}
+    .why-icon{width:36px;height:36px;border-radius:10px}
+    .why-text strong{font-size:.84rem}
+    .why-text p{font-size:.77rem}
+    .form-box{padding:32px;border-radius:var(--radius-lg);background:linear-gradient(150deg,var(--surface-2),var(--surface));border-color:rgba(255,255,255,.11);box-shadow:var(--shadow)}
+    .form-title{font-size:1.35rem}
+    .form-sub{font-size:.82rem;line-height:1.6}
+    .fg label{font-size:.66rem;color:#8fa7b2}
+    .fg input,.fg textarea,.fg select{min-height:48px;border-radius:11px;background:#070d11;border-color:rgba(255,255,255,.1)}
+    .btn-submit{width:100%;justify-content:center}
+
+    footer{padding:78px max(24px,calc((100vw - 1200px)/2)) 32px;background:#030608}
+    .foot-inner{gap:50px}
+    .foot-brand p,.fcol ul a,.fcol ul li{color:#78919c}
+    .tg-float{width:54px;height:54px;right:22px;bottom:22px;background:var(--accent);box-shadow:0 12px 36px rgba(0,213,238,.2)}
+
+    @media(max-width:1050px){
+      .hero-layout{grid-template-columns:1fr;gap:58px}
+      .hero-copy{max-width:820px}
+      .solution-card{max-width:680px}
+      .svc{grid-column:span 6!important}
+      .proc-grid{grid-template-columns:repeat(2,1fr)}
+      #faq{grid-template-columns:1fr}
+      #faq>.sl2,#faq>.st,.faq-list{grid-column:1}
+      .faq-list{grid-row:auto;margin-top:36px}
+      .cta-inner{grid-template-columns:1fr}
+    }
+    @media(max-width:760px){
+      nav{height:64px;padding:0 20px}
+      .hamburger{width:48px;height:48px;align-items:center;justify-content:center}
+      section{padding:92px 20px}
+      .hero{min-height:auto;padding:112px 20px 70px}
+      .hero-layout,.hero-copy,.hero-sub,.hero-btns,.hero-proof,.solution-card{width:calc(100vw - 40px);max-width:calc(100vw - 40px)}
+      .hero h1{font-size:clamp(3rem,14vw,5.2rem)}
+      .hero-sub{font-size:1rem}
+      .hero-btns{display:grid;grid-template-columns:1fr}
+      .hero-btns .btn-p,.hero-btns .btn-o{width:100%;justify-content:center}
+      .hero-proof{display:grid;grid-template-columns:1fr 1fr;margin-top:38px}
+      .hero-proof>div{margin:0;padding:18px 10px 0 0;border-right:0}
+      .hero-proof>div:last-child{grid-column:1/-1}
+      .solution-card{padding:20px;border-radius:22px}
+      .solution-options{grid-template-columns:1fr 1fr}
+      .st{font-size:clamp(2.25rem,11vw,3.4rem)}
+      .svc-grid{display:grid;grid-template-columns:1fr}
+      .svc{grid-column:1!important;min-height:270px}
+      .svc-icon{margin-bottom:38px}
+      .proc-grid{grid-template-columns:1fr}
+      .step{min-height:220px}
+      .price-grid{grid-template-columns:1fr}
+      .price-card.featured{transform:none}
+      .cta-why{grid-template-columns:1fr}
+      .form-box{padding:22px}
+      .fg-row{grid-template-columns:1fr}
+      .foot-inner{grid-template-columns:1fr 1fr}
+      .foot-brand{grid-column:1/-1}
+    }
+    @media(max-width:430px){
+      .hero h1{max-width:100%;font-size:clamp(2.45rem,12vw,2.85rem);overflow-wrap:anywhere}
+      .hero-proof{grid-template-columns:1fr}
+      .hero-proof>div:last-child{grid-column:auto}
+      .solution-head{display:block}
+      .solution-status{margin-top:12px}
+      .solution-options{grid-template-columns:1fr}
+      .solution-meta{grid-template-columns:1fr}
+      .foot-inner{grid-template-columns:1fr}
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -330,6 +536,7 @@
   <a href="#" class="logo">TAJ<span>CODE</span> LAB</a>
   <ul class="nav-links">
     <li><a href="#services">Услуги</a></li>
+    <li><a href="#solution">Подбор решения</a></li>
     <li><a href="#process">Процесс</a></li>
     <li><a href="#pricing">Цены</a></li>
     <li><a href="#faq">FAQ</a></li>
@@ -341,6 +548,7 @@
 </nav>
 <div class="mob-menu" id="mobMenu">
   <a href="#services" class="mob-link">Услуги</a>
+  <a href="#solution" class="mob-link">Подбор решения</a>
   <a href="#process" class="mob-link">Процесс</a>
   <a href="#pricing" class="mob-link">Цены</a>
   <a href="#faq" class="mob-link">FAQ</a>
@@ -349,62 +557,58 @@
 
 <!-- HERO -->
 <section class="hero" id="main">
-  <div class="aurora" aria-hidden="true"></div>
-  <div class="orb o1"></div>
-  <div class="orb o2"></div>
-  <div class="orb o3"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-layout">
+    <div class="hero-copy">
+      <div class="hero-badge"><span class="bdot"></span>Проектируем и запускаем IT-продукты</div>
+      <h1>Технологии,<br><span>которые двигают</span><br>бизнес вперёд</h1>
+      <p class="hero-sub">Берём на себя продукт целиком: стратегия, интерфейс, разработка, интеграции и запуск. Без разрыва между дизайном и кодом.</p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn-p">
+          Обсудить проект
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#solution" class="btn-o">Подобрать решение</a>
+      </div>
+      <div class="hero-proof" aria-label="Преимущества работы с нами">
+        <div><strong>01</strong><span>Договор и<br>NDA</span></div>
+        <div><strong>02</strong><span>Еженедельные<br>демо</span></div>
+        <div><strong>03</strong><span>Поддержка после<br>запуска</span></div>
+      </div>
+    </div>
 
-  <span class="tech-pill tp1" aria-hidden="true">React Native</span>
-  <span class="tech-pill tp2" aria-hidden="true">Flutter</span>
-  <span class="tech-pill tp3" aria-hidden="true">Node.js</span>
-  <span class="tech-pill tp4" aria-hidden="true">Next.js</span>
-  <span class="tech-pill tp5" aria-hidden="true">Python</span>
-  <span class="tech-pill tp6" aria-hidden="true">Telegram API</span>
-
-  <div class="hero-badge">
-    <span class="bdot"></span>
-    Таджикистан &amp; Центральная Азия
+    <div class="solution-card" id="solution">
+      <div class="solution-head">
+        <div>
+          <span class="solution-kicker">Умный подбор</span>
+          <h2>Что нужно запустить?</h2>
+        </div>
+        <span class="solution-status"><i></i> Онлайн</span>
+      </div>
+      <div class="solution-options" role="group" aria-label="Выберите тип проекта">
+        <button class="solution-option active" type="button" data-solution="website" aria-pressed="true">Сайт</button>
+        <button class="solution-option" type="button" data-solution="app" aria-pressed="false">Приложение</button>
+        <button class="solution-option" type="button" data-solution="system" aria-pressed="false">CRM / система</button>
+        <button class="solution-option" type="button" data-solution="bot" aria-pressed="false">Telegram-бот</button>
+      </div>
+      <div class="solution-result" aria-live="polite">
+        <div class="solution-main">
+          <span>Рекомендация</span>
+          <strong id="solutionTitle">Конверсионный сайт</strong>
+          <p id="solutionText">Подойдёт для презентации компании, услуг и стабильного потока заявок.</p>
+        </div>
+        <div class="solution-meta">
+          <div><span>Срок</span><strong id="solutionTime">от 10 дней</strong></div>
+          <div><span>Формат</span><strong id="solutionFormat">под ключ</strong></div>
+        </div>
+      </div>
+      <button class="solution-cta" id="solutionCta" type="button">
+        Получить оценку
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <p class="solution-note">Ориентир, не оферта. Точную оценку даём после короткого брифа.</p>
+    </div>
   </div>
-
-  <h1>
-    <span class="l1">Мы строим</span>
-    <span class="l2"><span class="rot-word" id="rotWord">цифровое будущее</span></span>
-  </h1>
-
-  <p class="hero-sub">
-    TAJCODE LAB — студия полного цикла. Мобильные приложения, веб-сайты, веб-приложения и любые IT-продукты — от идеи до запуска.
-  </p>
-
-  <div class="hero-btns">
-    <a href="#contact" class="btn-p">
-      Начать проект
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </a>
-    <a href="#services" class="btn-o">
-      Наши услуги
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
-    </a>
-  </div>
-
-  <div class="hero-trust">
-    <span class="stars" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-    </span>
-    <span><b>4.9</b> — нам доверяют 40+ компаний</span>
-  </div>
-
-  <div class="hero-stats">
-    <div class="stat"><div class="sn" data-target="50">0</div><div class="sl">Проектов</div></div>
-    <div class="stat"><div class="sn" data-target="3">0</div><div class="sl">Года опыта</div></div>
-    <div class="stat"><div class="sn" data-target="40">0</div><div class="sl">Клиентов</div></div>
-    <div class="stat"><div class="sn" data-target="98">0</div><div class="sl">% довольных</div></div>
-  </div>
-
-  <a class="scroll-ind" href="#services" aria-label="Листать вниз к услугам"></a>
 </section>
 
 <!-- MARQUEE -->
@@ -784,8 +988,8 @@
   </div>
 
   <div class="foot-bottom">
-    <p>© 2025 <span>TAJCODE LAB</span>. Все права защищены.</p>
-    <p>Сделано с ❤️ в <span>Таджикистане</span></p>
+    <p>© 2026 <span>TAJCODE LAB</span>. Все права защищены.</p>
+    <p>Спроектировано и разработано в <span>Таджикистане</span></p>
   </div>
 </footer>
 
@@ -830,6 +1034,64 @@
         q.setAttribute('aria-expanded', 'true');
       }
     });
+  });
+
+  // SMART SOLUTION SELECTOR
+  const solutions = {
+    website: {
+      title: 'Конверсионный сайт',
+      text: 'Подойдёт для презентации компании, услуг и стабильного потока заявок.',
+      time: 'от 10 дней',
+      format: 'под ключ',
+      formIndex: 1
+    },
+    app: {
+      title: 'MVP приложения',
+      text: 'Соберём первую версию продукта для iOS и Android и подготовим к запуску.',
+      time: 'от 6 недель',
+      format: 'iOS + Android',
+      formIndex: 3
+    },
+    system: {
+      title: 'Бизнес-система',
+      text: 'Автоматизируем процессы, роли, отчётность и интеграции в одном интерфейсе.',
+      time: 'от 8 недель',
+      format: 'web-система',
+      formIndex: 4
+    },
+    bot: {
+      title: 'Telegram-сервис',
+      text: 'Продажи, заявки, уведомления или личный кабинет прямо внутри Telegram.',
+      time: 'от 2 недель',
+      format: 'бот + API',
+      formIndex: 5
+    }
+  };
+  let selectedSolution = 'website';
+  const solutionTitle = document.getElementById('solutionTitle');
+  const solutionText = document.getElementById('solutionText');
+  const solutionTime = document.getElementById('solutionTime');
+  const solutionFormat = document.getElementById('solutionFormat');
+  document.querySelectorAll('.solution-option').forEach(button => {
+    button.addEventListener('click', () => {
+      selectedSolution = button.dataset.solution;
+      const solution = solutions[selectedSolution];
+      document.querySelectorAll('.solution-option').forEach(item => {
+        const active = item === button;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      solutionTitle.textContent = solution.title;
+      solutionText.textContent = solution.text;
+      solutionTime.textContent = solution.time;
+      solutionFormat.textContent = solution.format;
+    });
+  });
+  document.getElementById('solutionCta')?.addEventListener('click', () => {
+    const projectType = document.getElementById('f-type');
+    projectType.selectedIndex = solutions[selectedSolution].formIndex;
+    document.getElementById('contact').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    setTimeout(() => document.getElementById('f-name').focus({ preventScroll: true }), 450);
   });
 
   // ROTATING HEADLINE WORD
