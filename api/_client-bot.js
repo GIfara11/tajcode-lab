@@ -89,7 +89,7 @@ function format(template, values) {
 }
 
 const languageOf = (user) => user.language === 'tg' ? 'tg' : 'ru';
-const managerUsername = () => clean(process.env.MANAGER_USERNAME || 'tajcodelab', 64).replace(/^@/, '');
+const managerUsername = () => clean(process.env.MANAGER_USERNAME || 'd122145', 64).replace(/^@/, '');
 
 function adminIds() {
   const configured = String(process.env.BOT_ADMIN_IDS || '')
