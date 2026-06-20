@@ -5,21 +5,28 @@ function env(name) {
   return String(process.env[name] || '').trim();
 }
 
+function redisRestUrl() {
+  return env('UPSTASH_REDIS_REST_URL') || env('KV_REST_API_URL');
+}
+
+function redisRestToken() {
+  return env('UPSTASH_REDIS_REST_TOKEN') || env('KV_REST_API_TOKEN');
+}
 export function assertRedis() {
-  if (!env('UPSTASH_REDIS_REST_URL') || !env('UPSTASH_REDIS_REST_TOKEN')) {
+  if (!redisRestUrl() || !redisRestToken()) {
     const error = new Error('Analytics storage is not configured');
     error.statusCode = 503;
     throw error;
   }
 }
 
-async function redisPipeline(commands) {
+export async function redisPipeline(commands) {
   assertRedis();
 
-  const response = await fetch(`${env('UPSTASH_REDIS_REST_URL')}/pipeline`, {
+  const response = await fetch(`${redisRestUrl()}/pipeline`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${env('UPSTASH_REDIS_REST_TOKEN')}`,
+      Authorization: `Bearer ${redisRestToken()}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(commands)
@@ -208,21 +215,28 @@ export function formatTelegramStats(stats) {
   ].join('\n');
 }
 
-export async function sendTelegramMessage(chatId, text) {
+export async function telegramRequest(method, requestPayload) {
   const token = telegramToken();
   if (!token) throw new Error('BOT_TOKEN is not configured');
 
-  const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+  const response = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text,
-      disable_web_page_preview: true
-    })
+    body: JSON.stringify(requestPayload)
   });
 
-  const payload = await response.json();
-  if (!payload.ok) throw new Error(payload.description || 'Telegram API error');
-  return payload.result;
+  const responsePayload = await response.json();
+  if (!responsePayload.ok) {
+    throw new Error(responsePayload.description || `Telegram ${method} error`);
+  }
+  return responsePayload.result;
+}
+
+export async function sendTelegramMessage(chatId, text, options = {}) {
+  return telegramRequest('sendMessage', {
+    chat_id: chatId,
+    text,
+    disable_web_page_preview: true,
+    ...options
+  });
 }

@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   const host = req.headers['x-forwarded-host'] || req.headers.host;
   const proto = req.headers['x-forwarded-proto'] || 'https';
   const webhookUrl = `${proto}://${host}/api/telegram-webhook`;
-  const payload = { url: webhookUrl, allowed_updates: ['message'] };
+  const payload = { url: webhookUrl, allowed_updates: ['message', 'callback_query'] };
   if (telegramSecret()) payload.secret_token = telegramSecret();
 
   try {

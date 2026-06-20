@@ -5,6 +5,7 @@ import {
   telegramChatId,
   telegramSecret
 } from './_analytics.js';
+import { handleClientBotUpdate } from './_client-bot.js';
 
 function parseRange(text) {
   const normalized = String(text || '').trim().toLowerCase();
@@ -26,31 +27,28 @@ export default async function handler(req, res) {
     return res.status(401).json({ success: false, error: 'Invalid webhook secret' });
   }
 
-  const message = req.body?.message;
-  if (!message?.chat?.id) return res.status(200).json({ success: true });
-
-  const allowedChatId = telegramChatId();
-  if (!allowedChatId || String(message.chat.id) !== String(allowedChatId)) {
-    return res.status(200).json({ success: true });
-  }
-
   try {
-    const range = parseRange(message.text);
-    if (range === null) {
-      await sendTelegramMessage(
-        message.chat.id,
-        'Команды аналитики:\n/today — сегодня\n/stats — 7 дней\n/stats 30d — 30 дней'
-      );
-      return res.status(200).json({ success: true });
+    const message = req.body?.message;
+    const allowedChatId = telegramChatId();
+    const range = parseRange(message?.text);
+    const isAnalyticsRequest = message?.chat?.id
+      && allowedChatId
+      && String(message.chat.id) === String(allowedChatId)
+      && range !== null;
+
+    if (isAnalyticsRequest) {
+      const stats = await getStats(range);
+      await sendTelegramMessage(message.chat.id, formatTelegramStats(stats));
+      return res.status(200).json({ success: true, handled: 'analytics' });
     }
 
-    const stats = await getStats(range);
-    await sendTelegramMessage(message.chat.id, formatTelegramStats(stats));
-    return res.status(200).json({ success: true });
+    const handled = await handleClientBotUpdate(req.body || {});
+    return res.status(200).json({
+      success: true,
+      handled: handled ? 'client-bot' : false
+    });
   } catch (error) {
-    console.error('Telegram analytics webhook error:', error.message);
-    await sendTelegramMessage(message.chat.id, `Не удалось получить статистику: ${error.message}`)
-      .catch(() => {});
+    console.error('Telegram webhook error:', error.message);
     return res.status(200).json({ success: false });
   }
 }
