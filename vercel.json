@@ -12,16 +12,6 @@
       "destination": "/admin.html"
     },
     {
-      "source": "/:path((?!api/|robots\\.txt|sitemap\\.xml|og-image\\.(svg|png)|.*\\..*).*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "admin.tajcode-lab.ru"
-        }
-      ],
-      "destination": "/admin.html"
-    },
-    {
       "source": "/dashboard",
       "destination": "/admin.html"
     }
