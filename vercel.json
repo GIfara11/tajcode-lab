@@ -1,6 +1,58 @@
 {
   "version": 2,
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "admin.tajcode-lab.ru"
+        }
+      ],
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/:path((?!api/|robots\\.txt|sitemap\\.xml|og-image\\.(svg|png)|.*\\..*).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "admin.tajcode-lab.ru"
+        }
+      ],
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/admin.html"
+    }
+  ],
   "headers": [
+    {
+      "source": "/admin.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/dashboard.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [

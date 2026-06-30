@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin.html
+Disallow: /dashboard
 Disallow: /dashboard.html
 Disallow: /api/
 

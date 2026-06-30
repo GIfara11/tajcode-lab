@@ -231,6 +231,7 @@
     .fg input,.fg textarea,.fg select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:13px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;transition:border-color .2s,box-shadow .2s;resize:vertical;-webkit-appearance:none;appearance:none}
     .fg select option{background:var(--bg)}
     .fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,229,255,.08)}
+    .hp-field{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
     .fg input::placeholder,.fg textarea::placeholder{color:var(--muted)}
     .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .btn-submit{width:100%;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:10px}
@@ -879,14 +880,18 @@
       <div class="form-sub">Заполните форму — мы свяжемся с вами в Telegram или по номеру. Поддержка: @tajcodelab_bot</div>
 
       <form id="lead-form" onsubmit="sendForm(event)" novalidate>
+      <div class="hp-field" aria-hidden="true">
+        <label for="f-website">Сайт компании</label>
+        <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off"/>
+      </div>
       <div class="fg-row">
         <div class="fg">
           <label for="f-name">Имя</label>
-          <input type="text" id="f-name" name="name" autocomplete="name" placeholder="Ваше имя"/>
+          <input type="text" id="f-name" name="name" autocomplete="name" maxlength="80" required placeholder="Ваше имя"/>
         </div>
         <div class="fg">
           <label for="f-phone">Телефон / Telegram</label>
-          <input type="text" id="f-phone" name="phone" autocomplete="tel" placeholder="+992 или @username"/>
+          <input type="text" id="f-phone" name="phone" autocomplete="tel" maxlength="100" required placeholder="+992 или @username"/>
         </div>
       </div>
 
@@ -918,7 +923,7 @@
 
       <div class="fg">
         <label for="f-msg">Расскажите о проекте</label>
-        <textarea id="f-msg" name="message" rows="4" placeholder="Что хотите создать? Есть ли референсы, сроки, особые требования?"></textarea>
+        <textarea id="f-msg" name="message" rows="4" maxlength="2000" placeholder="Что хотите создать? Есть ли референсы, сроки, особые требования?"></textarea>
       </div>
 
       <button class="btn-p btn-submit" type="submit">
@@ -1151,6 +1156,7 @@
     const type   = document.getElementById('f-type').value;
     const budget = document.getElementById('f-budget').value;
     const msg    = document.getElementById('f-msg').value.trim();
+    const website = document.getElementById('f-website').value.trim();
     const el     = document.getElementById('form-msg');
 
     if (!name || !phone) {
@@ -1168,25 +1174,24 @@
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, type, budget, message: msg })
+        body: JSON.stringify({ name, phone, type, budget, message: msg, website })
       });
 
       const data = await res.json();
 
       if (data.success) {
-        window.tajAnalytics?.track('lead');
         el.className = 'ok';
         el.textContent = 'Заявка отправлена! Мы свяжемся с вами.';
         ['f-name','f-phone','f-msg'].forEach(id => document.getElementById(id).value = '');
         document.getElementById('f-type').value = '';
         document.getElementById('f-budget').value = '';
       } else {
-        throw new Error(data.error || 'Ошибка');
+        throw new Error(data.error || 'Не удалось отправить заявку.');
       }
     } catch (err) {
       console.error(err);
       el.className = 'err';
-      el.textContent = 'Ошибка отправки. Напишите в @tajcodelab_bot';
+      el.textContent = err.message || 'Ошибка отправки. Напишите в @tajcodelab_bot';
     } finally {
       btn.disabled = false;
       btn.innerHTML = btnOrigHTML;

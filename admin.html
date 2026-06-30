@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#050a0e">
+  <title>Админка — TAJCODE LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600;700&family=Fira+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050a0e;
+      --surface: #091118;
+      --surface-2: #0d1821;
+      --surface-3: #10212c;
+      --text: #ecf8ff;
+      --muted: #8aa4b3;
+      --soft: #577080;
+      --accent: #00e5ff;
+      --accent-2: #3b82f6;
+      --gold: #d97706;
+      --success: #43d18d;
+      --danger: #ff6874;
+      --border: rgba(141, 188, 207, .16);
+      --shadow: 0 24px 70px rgba(0, 0, 0, .32);
+      --radius: 18px;
+      --ring: rgba(0, 229, 255, .34);
+    }
+
+    * { box-sizing: border-box; }
+    html { color-scheme: dark; scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at 84% -18%, rgba(0, 229, 255, .1), transparent 34rem),
+        radial-gradient(circle at 10% 5%, rgba(59, 130, 246, .08), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "Fira Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    input,
+    textarea,
+    select { font: inherit; }
+
+    button,
+    select { cursor: pointer; }
+
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 3px;
+    }
+
+    .icon {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: 0 0 auto;
+    }
+
+    .app {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: 268px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100dvh;
+      padding: 28px 20px;
+      border-right: 1px solid var(--border);
+      background: rgba(5, 10, 14, .88);
+      backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      padding: 0 8px;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(0, 229, 255, .34);
+      border-radius: 11px;
+      color: var(--accent);
+      background: rgba(0, 229, 255, .1);
+      font-family: "Fira Code", monospace;
+      font-weight: 700;
+    }
+
+    .brand strong { color: var(--accent); }
+
+    .nav-label {
+      margin: 42px 10px 10px;
+      color: #5f7887;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .nav-list { display: grid; gap: 7px; }
+
+    .nav-item {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 13px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      color: var(--muted);
+      background: transparent;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .nav-item:hover { color: var(--text); background: rgba(255, 255, 255, .035); }
+    .nav-item.active {
+      border-color: rgba(0, 229, 255, .22);
+      background: rgba(0, 229, 255, .1);
+      color: var(--accent);
+    }
+
+    .side-card {
+      margin-top: auto;
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(0, 229, 255, .08), rgba(255, 255, 255, .02));
+    }
+
+    .status-row { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; }
+    .status-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--soft); box-shadow: 0 0 0 4px rgba(87, 112, 128, .14); }
+    .status-dot.online { background: var(--success); box-shadow: 0 0 0 4px rgba(67, 209, 141, .13); }
+    .side-card p { margin: 11px 0 14px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+
+    .main { min-width: 0; padding: 30px clamp(20px, 3.4vw, 54px) 56px; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-family: "Fira Code", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(30px, 4.6vw, 54px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    .subtitle {
+      margin: 12px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 15px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .035);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, color .18s ease;
+      touch-action: manipulation;
+    }
+
+    .button:hover { border-color: rgba(0, 229, 255, .34); color: var(--accent); transform: translateY(-1px); }
+    .button.primary { border-color: rgba(0, 229, 255, .32); background: var(--accent); color: #021015; box-shadow: 0 14px 38px rgba(0, 229, 255, .18); }
+    .button.primary:hover { color: #021015; background: #7af2ff; }
+    .button.danger { color: var(--danger); border-color: rgba(255, 104, 116, .28); }
+    .button.danger:hover { background: rgba(255, 104, 116, .1); color: #ff9ca4; }
+    .button:disabled { cursor: not-allowed; opacity: .48; transform: none; }
+
+    .select {
+      min-height: 46px;
+      padding: 0 38px 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      appearance: none;
+      background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238aa4b3' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 13px center;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .grid { display: grid; gap: 18px; }
+    .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .workspace { grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr); align-items: start; margin-top: 18px; }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .035), rgba(255, 255, 255, .018));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card.pad { padding: 20px; }
+
+    .metric {
+      min-height: 132px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .metric:after {
+      content: "";
+      position: absolute;
+      inset: auto 18px 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: .75;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      margin-top: 10px;
+      font-family: "Fira Code", monospace;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -.04em;
+    }
+
+    .metric-note { color: var(--soft); font-size: 12px; }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: -.025em;
+    }
+
+    .section-head p,
+    .muted {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .chart {
+      display: flex;
+      align-items: end;
+      gap: 9px;
+      height: 190px;
+      padding: 16px;
+      border: 1px solid rgba(141, 188, 207, .1);
+      border-radius: 15px;
+      background: rgba(5, 10, 14, .42);
+    }
+
+    .bar-wrap {
+      min-width: 0;
+      flex: 1;
+      display: grid;
+      gap: 8px;
+      align-content: end;
+      height: 100%;
+      color: var(--soft);
+      font-family: "Fira Code", monospace;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .bar {
+      min-height: 4px;
+      border-radius: 999px 999px 4px 4px;
+      background: linear-gradient(180deg, var(--accent), rgba(0, 229, 255, .16));
+      box-shadow: 0 0 18px rgba(0, 229, 255, .14);
+    }
+
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+
+    .list { display: grid; gap: 10px; }
+    .rank-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid rgba(141, 188, 207, .1);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .018);
+      font-size: 13px;
+    }
+
+    .rank-row span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rank-row strong { font-family: "Fira Code", monospace; color: var(--accent); }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .search {
+      width: min(340px, 100%);
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: rgba(5, 10, 14, .5);
+      color: var(--text);
+      padding: 0 14px;
+      font-size: 14px;
+    }
+
+    .products { display: grid; gap: 12px; }
+
+    .product {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      padding: 16px;
+      border: 1px solid rgba(141, 188, 207, .12);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .02);
+    }
+
+    .product:hover { border-color: rgba(0, 229, 255, .24); }
+    .product-title { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .product-title h3 { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 16px; letter-spacing: -.02em; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 9px;
+      border: 1px solid rgba(0, 229, 255, .18);
+      border-radius: 999px;
+      background: rgba(0, 229, 255, .08);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .pill.gray { border-color: rgba(141, 188, 207, .14); background: rgba(141, 188, 207, .08); color: var(--muted); }
+    .pill.gold { border-color: rgba(217, 119, 6, .28); background: rgba(217, 119, 6, .1); color: #f6b15a; }
+    .product p { margin: 9px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .product-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; color: var(--soft); font-size: 12px; }
+    .product-actions { display: flex; align-items: start; gap: 8px; }
+
+    .form {
+      display: grid;
+      gap: 13px;
+    }
+
+    .field { display: grid; gap: 7px; }
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(5, 10, 14, .58);
+      color: var(--text);
+      padding: 12px 13px;
+      outline: none;
+    }
+
+    .field textarea { min-height: 104px; resize: vertical; line-height: 1.5; }
+    .field input::placeholder,
+    .field textarea::placeholder { color: #526b7b; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .check {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .018);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .check input { width: 16px; height: 16px; accent-color: var(--accent); }
+    .form-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+
+    .empty {
+      padding: 24px;
+      border: 1px dashed rgba(141, 188, 207, .22);
+      border-radius: 16px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.55;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      max-width: min(420px, calc(100vw - 44px));
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(9, 17, 24, .94);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      transform: translateY(14px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .22s ease;
+      z-index: 60;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error { border-color: rgba(255, 104, 116, .35); color: #ffb7bd; }
+
+    .login {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+    }
+
+    .login-card {
+      width: min(470px, 100%);
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .02));
+      box-shadow: var(--shadow);
+    }
+
+    .login-card h1 { font-size: clamp(30px, 8vw, 46px); }
+    .login-card .form { margin-top: 22px; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 1180px) {
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .workspace { grid-template-columns: 1fr; }
+      .split { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 860px) {
+      .app { display: block; }
+      .sidebar {
+        position: static;
+        height: auto;
+        padding: 18px 16px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-label { display: none; }
+      .nav-list { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 16px; }
+      .nav-item { justify-content: center; }
+      .side-card { display: none; }
+      .main { padding: 24px 16px 42px; }
+      .topbar { display: grid; }
+      .actions { justify-content: stretch; }
+      .actions > * { flex: 1; }
+      .toolbar { display: grid; }
+      .search { width: 100%; }
+    }
+
+    @media (max-width: 620px) {
+      .metrics { grid-template-columns: 1fr; }
+      .form-row,
+      .checks,
+      .form-actions { grid-template-columns: 1fr; }
+      .product { grid-template-columns: 1fr; }
+      .product-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+      .nav-list { grid-template-columns: 1fr; }
+      .chart { gap: 5px; padding: 10px; }
+      .bar-wrap { font-size: 9px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .001ms !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section id="login" class="login">
+    <div class="login-card">
+      <p class="eyebrow">private admin</p>
+      <h1>Вход в админку TAJCODE LAB</h1>
+      <p class="subtitle">Введи `DASHBOARD_KEY`. Этот же ключ защищает аналитику, продукты и Telegram-команды статистики.</p>
+      <form id="login-form" class="form">
+        <div class="field">
+          <label for="admin-key">Ключ доступа</label>
+          <input id="admin-key" type="password" autocomplete="current-password" placeholder="Секретный ключ">
+        </div>
+        <button class="button primary" type="submit">Открыть админку</button>
+      </form>
+    </div>
+  </section>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar" aria-label="Навигация админки">
+      <a class="brand" href="#overview" aria-label="TAJCODE LAB admin">
+        <span class="brand-mark">TL</span>
+        <span>TAJCODE <strong>ADMIN</strong></span>
+      </a>
+
+      <div class="nav-label">Управление</div>
+      <nav class="nav-list">
+        <a class="nav-item active" href="#overview">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h6V4H4zM14 20h6V4h-6zM4 20h6v-3H4z"/></svg>
+          Обзор
+        </a>
+        <a class="nav-item" href="#products">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+          Продукты
+        </a>
+        <a class="nav-item" href="#editor">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+          Добавить
+        </a>
+      </nav>
+
+      <div class="side-card">
+        <div class="status-row">
+          <span id="storage-dot" class="status-dot"></span>
+          <span id="storage-status">Проверка Redis</span>
+        </div>
+        <p id="domain-note">Поддомен: admin.tajcode-lab.ru. Если DNS не добавлен в Vercel — откроется только /admin.html.</p>
+        <button id="logout-btn" class="button" type="button">Выйти</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section id="overview">
+        <div class="topbar">
+          <div>
+            <p class="eyebrow">operations dashboard</p>
+            <h1>Аналитика, заявки и готовые продукты в одном месте</h1>
+            <p class="subtitle">Эта админка показывает посещения сайта и даёт тебе CRUD для портфолио клиентских продуктов. Данные лежат в Upstash Redis, доступ закрыт ключом.</p>
+          </div>
+          <div class="actions">
+            <select id="range" class="select" aria-label="Период аналитики">
+              <option value="1">Сегодня</option>
+              <option value="7" selected>7 дней</option>
+              <option value="30">30 дней</option>
+              <option value="90">90 дней</option>
+            </select>
+            <button id="refresh-btn" class="button" type="button">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.2 6.5"/><path d="M3 12A9 9 0 0 1 18.2 5.5"/><path d="M18 2v4h-4"/><path d="M6 22v-4h4"/></svg>
+              Обновить
+            </button>
+          </div>
+        </div>
+
+        <div class="grid metrics">
+          <article class="card metric">
+            <div>
+              <div class="metric-label">Просмотры</div>
+              <div id="m-views" class="metric-value">0</div>
+            </div>
+            <div class="metric-note">Все pageview за период</div>
+          </article>
+          <article class="card metric">
+            <div>
+              <div class="metric-label">Визиты</div>
+              <div id="m-visits" class="metric-value">0</div>
+            </div>
+            <div class="metric-note">Сессии посетителей</div>
+          </article>
+          <article class="card metric">
+            <div>
+              <div class="metric-label">Заявки</div>
+              <div id="m-leads" class="metric-value">0</div>
+            </div>
+            <div class="metric-note">Отправленные формы</div>
+          </article>
+          <article class="card metric">
+            <div>
+              <div class="metric-label">Конверсия</div>
+              <div id="m-conversion" class="metric-value">0%</div>
+            </div>
+            <div class="metric-note">Заявки / визиты</div>
+          </article>
+        </div>
+
+        <div class="grid workspace">
+          <section class="card pad">
+            <div class="section-head">
+              <div>
+                <h2>Динамика посещений</h2>
+                <p>Быстрый график без внешних библиотек, чтобы CSP и загрузка были простыми.</p>
+              </div>
+              <span id="updated-at" class="pill gray">нет данных</span>
+            </div>
+            <div id="chart" class="chart" aria-label="График посещений"></div>
+          </section>
+
+          <section class="card pad">
+            <div class="section-head">
+              <div>
+                <h2>Продукты</h2>
+                <p>Сколько проектов уже заведено в админке.</p>
+              </div>
+              <span id="products-count" class="pill">0</span>
+            </div>
+            <div class="list">
+              <div class="rank-row"><span>Видимые на сайте</span><strong id="p-visible">0</strong></div>
+              <div class="rank-row"><span>Закреплённые кейсы</span><strong id="p-featured">0</strong></div>
+              <div class="rank-row"><span>На поддержке</span><strong id="p-support">0</strong></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="split">
+          <section class="card pad">
+            <div class="section-head">
+              <div>
+                <h2>Топ страниц</h2>
+                <p>Что реально смотрят на сайте.</p>
+              </div>
+            </div>
+            <div id="top-pages" class="list"></div>
+          </section>
+          <section class="card pad">
+            <div class="section-head">
+              <div>
+                <h2>Источники</h2>
+                <p>Откуда приходит трафик.</p>
+              </div>
+            </div>
+            <div id="top-sources" class="list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="products" class="card pad" style="margin-top:18px">
+        <div class="section-head">
+          <div>
+            <h2>Готовые продукты клиентов</h2>
+            <p>Добавляй сайты, боты, CRM, приложения и внутренние системы. Потом это можно вывести на публичный сайт как портфолио.</p>
+          </div>
+          <a class="button primary" href="#editor">Добавить продукт</a>
+        </div>
+        <div class="toolbar">
+          <input id="search" class="search" type="search" placeholder="Поиск по названию, клиенту, стеку">
+          <span id="products-meta" class="muted">0 записей</span>
+        </div>
+        <div id="products-list" class="products"></div>
+      </section>
+
+      <section id="editor" class="card pad" style="margin-top:18px">
+        <div class="section-head">
+          <div>
+            <h2 id="form-title">Добавить продукт</h2>
+            <p>Заполняй коротко и по делу: клиент, что сделали, стек, результат и ссылка.</p>
+          </div>
+          <button id="reset-form" class="button" type="button">Очистить</button>
+        </div>
+
+        <form id="product-form" class="form">
+          <input id="product-id" type="hidden">
+          <div class="form-row">
+            <div class="field">
+              <label for="title">Название</label>
+              <input id="title" name="title" maxlength="120" required placeholder="CRM для доставки">
+            </div>
+            <div class="field">
+              <label for="client">Клиент</label>
+              <input id="client" name="client" maxlength="100" required placeholder="Название клиента">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="type">Тип</label>
+              <select id="type" name="type">
+                <option>Сайт</option>
+                <option>Telegram бот</option>
+                <option>CRM</option>
+                <option>Мобильное приложение</option>
+                <option>Веб-сервис</option>
+                <option>Автоматизация</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="status">Статус</label>
+              <select id="status" name="status">
+                <option value="completed">Завершён</option>
+                <option value="support">На поддержке</option>
+                <option value="hidden">Скрыт</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="completedAt">Дата завершения</label>
+              <input id="completedAt" name="completedAt" type="date">
+            </div>
+            <div class="field">
+              <label for="result">Результат</label>
+              <input id="result" name="result" maxlength="160" placeholder="например: -38% ручной работы">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="summary">Описание</label>
+            <textarea id="summary" name="summary" maxlength="420" placeholder="Что сделали, какую проблему закрыли, чем продукт полезен клиенту"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="stack">Стек</label>
+              <input id="stack" name="stack" maxlength="180" placeholder="Vercel, Telegram API, Redis">
+            </div>
+            <div class="field">
+              <label for="url">Ссылка на продукт</label>
+              <input id="url" name="url" maxlength="220" placeholder="https://example.com">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="cover">Обложка</label>
+            <input id="cover" name="cover" maxlength="220" placeholder="https://.../cover.webp">
+          </div>
+
+          <div class="checks">
+            <label class="check"><input id="visible" name="visible" type="checkbox" checked> Видим в портфолио</label>
+            <label class="check"><input id="featured" name="featured" type="checkbox"> Закрепить как кейс</label>
+          </div>
+
+          <div class="form-actions">
+            <button id="save-product" class="button primary" type="submit">Сохранить продукт</button>
+            <button id="delete-product" class="button danger" type="button" disabled>Удалить</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const KEY_STORAGE = 'taj_admin_key';
+    const state = {
+      key: localStorage.getItem(KEY_STORAGE) || '',
+      stats: null,
+      products: [],
+      loading: false
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const nf = new Intl.NumberFormat('ru-RU');
+
+    function iconButton(label) {
+      return label;
+    }
+
+    function toast(message, type = 'ok') {
+      const el = $('#toast');
+      el.textContent = message;
+      el.className = `toast show ${type === 'error' ? 'error' : ''}`;
+      window.clearTimeout(toast.timer);
+      toast.timer = window.setTimeout(() => el.className = 'toast', 3600);
+    }
+
+    async function api(path, options = {}) {
+      const response = await fetch(path, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-dashboard-key': state.key,
+          ...(options.headers || {})
+        }
+      });
+
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || payload.success === false) {
+        if (response.status === 401) {
+          localStorage.removeItem(KEY_STORAGE);
+          state.key = '';
+          showLogin();
+        }
+        throw new Error(payload.error || `HTTP ${response.status}`);
+      }
+
+      return payload.data;
+    }
+
+    function showLogin() {
+      $('#login').classList.remove('hidden');
+      $('#app').classList.add('hidden');
+      $('#admin-key').focus();
+    }
+
+    function showApp() {
+      $('#login').classList.add('hidden');
+      $('#app').classList.remove('hidden');
+    }
+
+    function setLoading(value) {
+      state.loading = value;
+      $('#refresh-btn').disabled = value;
+      $('#save-product').disabled = value;
+    }
+
+    function metric(id, value, suffix = '') {
+      $(id).textContent = `${nf.format(value || 0)}${suffix}`;
+    }
+
+    function renderStats() {
+      const stats = state.stats;
+      if (!stats) return;
+
+      metric('#m-views', stats.metrics.views);
+      metric('#m-visits', stats.metrics.visits);
+      metric('#m-leads', stats.metrics.leads);
+      metric('#m-conversion', stats.metrics.conversion, '%');
+
+      $('#updated-at').textContent = new Date(stats.generatedAt).toLocaleString('ru-RU', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+      });
+
+      const max = Math.max(...stats.series.map((item) => item.views), 1);
+      $('#chart').innerHTML = stats.series.map((item) => {
+        const height = Math.max(4, Math.round((item.views / max) * 145));
+        const label = item.date.slice(5).replace('-', '.');
+        return `<div class="bar-wrap" title="${item.date}: ${item.views}">
+          <div class="bar" style="height:${height}px"></div>
+          <span>${label}</span>
+        </div>`;
+      }).join('');
+
+      renderRank('#top-pages', stats.pages, 'Пока нет данных по страницам');
+      renderRank('#top-sources', stats.sources, 'Пока нет данных по источникам');
+
+      $('#storage-dot').classList.add('online');
+      $('#storage-status').textContent = stats.botConfigured ? 'Redis и бот активны' : 'Redis активен, бот неполный';
+    }
+
+    function renderRank(selector, items, emptyText) {
+      const el = $(selector);
+      if (!items || items.length === 0) {
+        el.innerHTML = `<div class="empty">${emptyText}</div>`;
+        return;
+      }
+
+      el.innerHTML = items.map((item) => `
+        <div class="rank-row">
+          <span title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</span>
+          <strong>${nf.format(item.count)}</strong>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function statusLabel(status) {
+      if (status === 'support') return 'На поддержке';
+      if (status === 'hidden') return 'Скрыт';
+      return 'Завершён';
+    }
+
+    function renderProductStats() {
+      const visible = state.products.filter((item) => item.visible).length;
+      const featured = state.products.filter((item) => item.featured).length;
+      const support = state.products.filter((item) => item.status === 'support').length;
+      $('#products-count').textContent = nf.format(state.products.length);
+      $('#p-visible').textContent = nf.format(visible);
+      $('#p-featured').textContent = nf.format(featured);
+      $('#p-support').textContent = nf.format(support);
+      $('#products-meta').textContent = `${nf.format(state.products.length)} записей`;
+    }
+
+    function renderProducts() {
+      renderProductStats();
+      const query = $('#search').value.trim().toLowerCase();
+      const list = state.products.filter((item) => {
+        const haystack = [item.title, item.client, item.type, item.stack, item.summary].join(' ').toLowerCase();
+        return !query || haystack.includes(query);
+      });
+
+      const el = $('#products-list');
+      if (list.length === 0) {
+        el.innerHTML = '<div class="empty">Продуктов пока нет. Добавь первый кейс через форму ниже.</div>';
+        return;
+      }
+
+      el.innerHTML = list.map((item) => `
+        <article class="product" data-id="${escapeHtml(item.id)}">
+          <div>
+            <div class="product-title">
+              <h3>${escapeHtml(item.title)}</h3>
+              <span class="pill ${item.status === 'support' ? 'gold' : item.status === 'hidden' ? 'gray' : ''}">${statusLabel(item.status)}</span>
+              ${item.featured ? '<span class="pill gold">Кейс</span>' : ''}
+            </div>
+            <p>${escapeHtml(item.summary || 'Описание не заполнено.')}</p>
+            <div class="product-meta">
+              <span>${escapeHtml(item.client)}</span>
+              <span>${escapeHtml(item.type)}</span>
+              ${item.completedAt ? `<span>${escapeHtml(item.completedAt)}</span>` : ''}
+              ${item.stack ? `<span>${escapeHtml(item.stack)}</span>` : ''}
+              ${item.result ? `<span>${escapeHtml(item.result)}</span>` : ''}
+            </div>
+          </div>
+          <div class="product-actions">
+            ${item.url ? `<a class="button" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Открыть</a>` : ''}
+            <button class="button" type="button" data-edit="${escapeHtml(item.id)}">${iconButton('Изменить')}</button>
+          </div>
+        </article>
+      `).join('');
+
+      el.querySelectorAll('[data-edit]').forEach((button) => {
+        button.addEventListener('click', () => editProduct(button.dataset.edit));
+      });
+    }
+
+    async function loadStats() {
+      const range = $('#range').value;
+      state.stats = await api(`/api/stats?range=${encodeURIComponent(range)}`);
+      renderStats();
+    }
+
+    async function loadProducts() {
+      const data = await api('/api/products');
+      state.products = data.products || [];
+      renderProducts();
+    }
+
+    async function loadAll() {
+      setLoading(true);
+      try {
+        await Promise.all([loadStats(), loadProducts()]);
+        showApp();
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function formPayload() {
+      return {
+        id: $('#product-id').value,
+        title: $('#title').value.trim(),
+        client: $('#client').value.trim(),
+        type: $('#type').value,
+        status: $('#status').value,
+        completedAt: $('#completedAt').value,
+        result: $('#result').value.trim(),
+        summary: $('#summary').value.trim(),
+        stack: $('#stack').value.trim(),
+        url: $('#url').value.trim(),
+        cover: $('#cover').value.trim(),
+        visible: $('#visible').checked,
+        featured: $('#featured').checked
+      };
+    }
+
+    function resetForm() {
+      $('#product-form').reset();
+      $('#product-id').value = '';
+      $('#visible').checked = true;
+      $('#featured').checked = false;
+      $('#delete-product').disabled = true;
+      $('#form-title').textContent = 'Добавить продукт';
+    }
+
+    function editProduct(id) {
+      const item = state.products.find((product) => product.id === id);
+      if (!item) return;
+
+      $('#product-id').value = item.id;
+      $('#title').value = item.title || '';
+      $('#client').value = item.client || '';
+      $('#type').value = item.type || 'Сайт';
+      $('#status').value = item.status || 'completed';
+      $('#completedAt').value = item.completedAt || '';
+      $('#result').value = item.result || '';
+      $('#summary').value = item.summary || '';
+      $('#stack').value = item.stack || '';
+      $('#url').value = item.url || '';
+      $('#cover').value = item.cover || '';
+      $('#visible').checked = Boolean(item.visible);
+      $('#featured').checked = Boolean(item.featured);
+      $('#delete-product').disabled = false;
+      $('#form-title').textContent = `Редактировать: ${item.title}`;
+      location.hash = '#editor';
+      $('#title').focus();
+    }
+
+    async function saveProduct(event) {
+      event.preventDefault();
+      const payload = formPayload();
+      if (!payload.title || !payload.client) {
+        toast('Название и клиент обязательны.', 'error');
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const isUpdate = Boolean(payload.id);
+        const data = await api('/api/products', {
+          method: isUpdate ? 'PATCH' : 'POST',
+          body: JSON.stringify(payload)
+        });
+
+        const product = data.product;
+        const index = state.products.findIndex((item) => item.id === product.id);
+        if (index >= 0) state.products[index] = product;
+        else state.products.unshift(product);
+
+        renderProducts();
+        resetForm();
+        toast(isUpdate ? 'Продукт обновлён.' : 'Продукт добавлен.');
+      } catch (error) {
+        toast(error.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function removeProduct() {
+      const id = $('#product-id').value;
+      if (!id) return;
+      const item = state.products.find((product) => product.id === id);
+      if (!confirm(`Удалить продукт "${item?.title || id}"? Действие нельзя откатить.`)) return;
+
+      setLoading(true);
+      try {
+        await api(`/api/products?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        state.products = state.products.filter((product) => product.id !== id);
+        renderProducts();
+        resetForm();
+        toast('Продукт удалён.');
+      } catch (error) {
+        toast(error.message, 'error');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function updateActiveNav() {
+      const current = location.hash || '#overview';
+      document.querySelectorAll('.nav-item').forEach((item) => {
+        item.classList.toggle('active', item.getAttribute('href') === current);
+      });
+    }
+
+    $('#login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      state.key = $('#admin-key').value.trim();
+      if (!state.key) return;
+
+      try {
+        localStorage.setItem(KEY_STORAGE, state.key);
+        await loadAll();
+      } catch (error) {
+        toast(error.message || 'Ключ не подошёл.', 'error');
+      }
+    });
+
+    $('#refresh-btn').addEventListener('click', () => loadAll().catch((error) => toast(error.message, 'error')));
+    $('#range').addEventListener('change', () => loadStats().catch((error) => toast(error.message, 'error')));
+    $('#search').addEventListener('input', renderProducts);
+    $('#product-form').addEventListener('submit', saveProduct);
+    $('#reset-form').addEventListener('click', resetForm);
+    $('#delete-product').addEventListener('click', removeProduct);
+    $('#logout-btn').addEventListener('click', () => {
+      localStorage.removeItem(KEY_STORAGE);
+      state.key = '';
+      showLogin();
+    });
+    window.addEventListener('hashchange', updateActiveNav);
+
+    $('#domain-note').textContent = `Открыто на: ${location.host}. Боевой поддомен: admin.tajcode-lab.ru.`;
+    updateActiveNav();
+
+    if (state.key) {
+      loadAll().catch((error) => {
+        toast(error.message, 'error');
+        showLogin();
+      });
+    } else {
+      showLogin();
+    }
+  </script>
+</body>
+</html>

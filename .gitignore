@@ -1,3 +1,4 @@
 .env
 .vercel
 production-*.png
+.claude/

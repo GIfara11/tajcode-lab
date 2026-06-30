@@ -12,6 +12,7 @@ function redisRestUrl() {
 function redisRestToken() {
   return env('UPSTASH_REDIS_REST_TOKEN') || env('KV_REST_API_TOKEN');
 }
+
 export function assertRedis() {
   if (!redisRestUrl() || !redisRestToken()) {
     const error = new Error('Analytics storage is not configured');
@@ -37,6 +38,10 @@ export async function redisPipeline(commands) {
   }
 
   const payload = await response.json();
+  if (!Array.isArray(payload)) {
+    throw new Error('Analytics storage returned an invalid response');
+  }
+
   const failed = payload.find((item) => item.error);
   if (failed) throw new Error(failed.error);
   return payload.map((item) => item.result);
@@ -202,13 +207,13 @@ export function formatTelegramStats(stats) {
   const period = stats.range === 1 ? 'сегодня' : `за ${stats.range} дн.`;
 
   return [
-    `📊 TAJCODE LAB — ${period}`,
+    `TAJCODE LAB — ${period}`,
     '',
-    `👁 Просмотры: ${stats.metrics.views.toLocaleString('ru-RU')}`,
-    `🧭 Визиты: ${stats.metrics.visits.toLocaleString('ru-RU')}`,
-    `👤 Пользователи: ${stats.metrics.users.toLocaleString('ru-RU')}`,
-    `🎯 Заявки: ${stats.metrics.leads.toLocaleString('ru-RU')}`,
-    `📈 Конверсия: ${stats.metrics.conversion}%`,
+    `Просмотры: ${stats.metrics.views.toLocaleString('ru-RU')}`,
+    `Визиты: ${stats.metrics.visits.toLocaleString('ru-RU')}`,
+    `Пользователи: ${stats.metrics.users.toLocaleString('ru-RU')}`,
+    `Заявки: ${stats.metrics.leads.toLocaleString('ru-RU')}`,
+    `Конверсия: ${stats.metrics.conversion}%`,
     '',
     `Топ-страница: ${topPage ? `${topPage.name} — ${topPage.count}` : 'нет данных'}`,
     `Топ-источник: ${topSource ? `${topSource.name} — ${topSource.count}` : 'нет данных'}`
