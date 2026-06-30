@@ -17,6 +17,8 @@
 UPSTASH_REDIS_REST_URL=https://...
 UPSTASH_REDIS_REST_TOKEN=...
 DASHBOARD_KEY=длинный-случайный-пароль
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=опционально-отдельный-пароль-админки
 BOT_TOKEN=токен-от-BotFather
 CHAT_ID=id-чата-для-заявок
 ANALYTICS_CHAT_ID=id-чата-для-аналитики
@@ -41,8 +43,18 @@ admin.tajcode-lab.ru → /admin.html
 3. После валидации открой `https://admin.tajcode-lab.ru`.
 4. Введи `DASHBOARD_KEY`.
 
-Если поддомен ещё не подключен, админка доступна по `https://tajcode-lab.ru/admin.html`.
+Если поддомен ещё не подключен, админка доступна по `https://tajcode-lab.ru/api/admin` или через редирект `https://tajcode-lab.ru/admin.html`.
 
+## Серверная защита админки
+
+Админка отдаётся через `/api/admin`, а не как публичный статический HTML. Перед выдачей страницы сервер требует Basic Auth:
+
+- логин: `ADMIN_USERNAME`, по умолчанию `admin`;
+- пароль: `ADMIN_PASSWORD`, если задан; иначе используется `DASHBOARD_KEY`.
+
+После успешного входа сервер ставит HttpOnly-cookie `taj_admin_session`, поэтому API `/api/stats` и `/api/products` принимает либо этот cookie, либо старый заголовок `x-dashboard-key`.
+
+`/admin.html` оставлен только как редирект на защищённый `/api/admin`.
 ## API
 
 ### Статистика

@@ -9,11 +9,15 @@
           "value": "admin.tajcode-lab.ru"
         }
       ],
-      "destination": "/admin.html"
+      "destination": "/api/admin"
+    },
+    {
+      "source": "/admin",
+      "destination": "/api/admin"
     },
     {
       "source": "/dashboard",
-      "destination": "/admin.html"
+      "destination": "/api/admin"
     }
   ],
   "headers": [

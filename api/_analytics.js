@@ -1,3 +1,5 @@
+import { hasAdminSession } from './_admin_auth.js';
+
 const DAY_MS = 86_400_000;
 const TIME_ZONE = 'Asia/Dushanbe';
 
@@ -186,7 +188,7 @@ export async function getStats(rangeValue) {
 export function verifyDashboardKey(req) {
   const expected = env('DASHBOARD_KEY');
   const received = cleanText(req.headers['x-dashboard-key'], 200);
-  return Boolean(expected && received && expected === received);
+  return Boolean((expected && received && expected === received) || hasAdminSession(req));
 }
 
 export function telegramChatId() {
