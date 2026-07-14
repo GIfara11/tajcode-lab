@@ -410,6 +410,29 @@
     .svc-title{font-size:1.22rem;letter-spacing:-.02em}
     .svc-desc{max-width:540px;color:var(--muted);font-size:.92rem;line-height:1.75}
 
+
+    .cases-head{display:flex;align-items:end;justify-content:space-between;gap:32px;margin-bottom:54px}
+    .cases-head .ss{margin:0}
+    .cases-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .case-card{position:relative;min-height:360px;display:flex;flex-direction:column;justify-content:space-between;padding:26px;border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(150deg,rgba(16,29,37,.92),rgba(7,14,19,.96));overflow:hidden;transition:transform .25s ease,border-color .25s ease,background .25s ease}
+    .case-card:hover{transform:translateY(-5px);border-color:var(--border-strong);background:var(--surface-2)}
+    .case-card::before{content:'';position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.7}
+    .case-cover{height:150px;margin:-26px -26px 24px;border-bottom:1px solid var(--border);background:radial-gradient(circle at 20% 20%,rgba(92,236,255,.18),transparent 34%),linear-gradient(135deg,#0b1820,#05090c);overflow:hidden}
+    .case-cover img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9) contrast(1.05)}
+    .case-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+    .case-type,.case-featured{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border:1px solid rgba(92,236,255,.2);border-radius:999px;background:rgba(92,236,255,.08);color:var(--accent);font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .case-featured{border-color:rgba(231,189,97,.28);background:rgba(231,189,97,.09);color:var(--gold)}
+    .case-title{margin:0 0 8px;font-family:'Syne',sans-serif;font-size:1.25rem;line-height:1.16;letter-spacing:-.035em}
+    .case-client{color:var(--muted-strong);font-size:.78rem;font-weight:700;margin-bottom:14px}
+    .case-summary{color:var(--muted);font-size:.88rem;line-height:1.68;margin:0 0 20px}
+    .case-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:18px;border-top:1px solid var(--border)}
+    .case-meta span{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;background:rgba(255,255,255,.035);color:#8da5af;font-size:.68rem;font-weight:600}
+    .case-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px}
+    .case-result{color:var(--accent);font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700}
+    .case-link{display:inline-flex;align-items:center;gap:8px;color:var(--text);font-size:.78rem;font-weight:700;text-decoration:none}
+    .case-link:hover{color:var(--accent)}
+    .cases-empty{display:none;margin-top:24px;padding:24px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);font-size:.9rem}
+
     #process{background:linear-gradient(180deg,var(--bg2),#071017)}
     .proc-grid{grid-template-columns:repeat(3,1fr);gap:12px;margin-top:64px}
     .proc-grid::before{display:none}
@@ -466,6 +489,7 @@
       .hero-copy{max-width:820px}
       .solution-card{max-width:680px}
       .svc{grid-column:span 6!important}
+      .cases-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .proc-grid{grid-template-columns:repeat(2,1fr)}
       #faq{grid-template-columns:1fr}
       #faq>.sl2,#faq>.st,.faq-list{grid-column:1}
@@ -489,6 +513,11 @@
       .solution-options{grid-template-columns:1fr 1fr}
       .st{font-size:clamp(2.25rem,11vw,3.4rem)}
       .svc-grid{display:grid;grid-template-columns:1fr}
+      .cases-head{display:block;margin-bottom:38px}
+      .cases-head .ss{margin-top:18px}
+      .cases-grid{grid-template-columns:1fr}
+      .case-card{min-height:auto;padding:22px}
+      .case-cover{margin:-22px -22px 22px}
       .svc{grid-column:1!important;min-height:270px}
       .svc-icon{margin-bottom:38px}
       .proc-grid{grid-template-columns:1fr}
@@ -542,6 +571,7 @@
   <ul class="nav-links">
     <li><a href="#services">Услуги</a></li>
     <li><a href="#solution">Подбор решения</a></li>
+    <li><a href="#cases">Кейсы</a></li>
     <li><a href="#process">Процесс</a></li>
     <li><a href="#pricing">Цены</a></li>
     <li><a href="#faq">FAQ</a></li>
@@ -554,6 +584,7 @@
 <div class="mob-menu" id="mobMenu">
   <a href="#services" class="mob-link">Услуги</a>
   <a href="#solution" class="mob-link">Подбор решения</a>
+  <a href="#cases" class="mob-link">Кейсы</a>
   <a href="#process" class="mob-link">Процесс</a>
   <a href="#pricing" class="mob-link">Цены</a>
   <a href="#faq" class="mob-link">FAQ</a>
@@ -682,6 +713,21 @@
       <div class="svc-desc">Платёжные системы, карты, аналитика, мессенджеры, сторонние сервисы — подключим что угодно к вашему продукту.</div>
     </div>
   </div>
+</section>
+
+
+<!-- CASES -->
+<section id="cases">
+  <div class="cases-head">
+    <div>
+      <div class="sl2">Готовые кейсы</div>
+      <h2 class="st">Проекты, которые<br>уже работают</h2>
+    </div>
+    <p class="ss">Здесь автоматически появляются видимые продукты из админки: сайты, CRM, Telegram-боты, приложения и автоматизации.</p>
+  </div>
+
+  <div id="public-cases" class="cases-grid reveal" aria-live="polite"></div>
+  <div id="cases-empty" class="cases-empty">Кейсы пока скрыты или ещё не добавлены в админке.</div>
 </section>
 
 <!-- PROCESS -->
@@ -1152,6 +1198,78 @@
   document.querySelectorAll('[data-target]').forEach(el => statsObs.observe(el));
 
   
+
+  // PUBLIC CASES FROM ADMIN
+  async function loadPublicCases() {
+    const section = document.getElementById('cases');
+    const grid = document.getElementById('public-cases');
+    const empty = document.getElementById('cases-empty');
+    if (!section || !grid) return;
+
+    const escapeHtml = (value) => String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+
+    const splitStack = (value) => String(value || '')
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .slice(0, 3);
+
+    try {
+      const response = await fetch('/api/public-products', { headers: { Accept: 'application/json' } });
+      const payload = await response.json();
+      if (!response.ok || payload.success === false) throw new Error(payload.error || 'Products error');
+
+      const products = payload.data?.products || [];
+      if (!products.length) {
+        empty.style.display = 'block';
+        return;
+      }
+
+      grid.innerHTML = products.map((product) => {
+        const stack = splitStack(product.stack);
+        const cover = product.cover
+          ? `<div class="case-cover"><img src="${escapeHtml(product.cover)}" alt="${escapeHtml(product.title)}" loading="lazy"></div>`
+          : '<div class="case-cover" aria-hidden="true"></div>';
+        const link = product.url
+          ? `<a class="case-link" href="${escapeHtml(product.url)}" target="_blank" rel="noopener">Открыть проект →</a>`
+          : '<span></span>';
+
+        return `<article class="case-card">
+          ${cover}
+          <div>
+            <div class="case-top">
+              <span class="case-type">${escapeHtml(product.type || 'Проект')}</span>
+              ${product.featured ? '<span class="case-featured">Кейс</span>' : ''}
+            </div>
+            <h3 class="case-title">${escapeHtml(product.title)}</h3>
+            <div class="case-client">${escapeHtml(product.client)}</div>
+            <p class="case-summary">${escapeHtml(product.summary || 'Короткое описание проекта скоро появится.')}</p>
+            <div class="case-meta">
+              ${product.completedAt ? `<span>${escapeHtml(product.completedAt)}</span>` : ''}
+              ${stack.map((item) => `<span>${escapeHtml(item)}</span>`).join('')}
+            </div>
+          </div>
+          <div class="case-actions">
+            <strong class="case-result">${escapeHtml(product.result || 'Запущено')}</strong>
+            ${link}
+          </div>
+        </article>`;
+      }).join('');
+
+      grid.querySelectorAll('.case-card').forEach((card) => obs.observe(card));
+    } catch (error) {
+      console.error('Public cases error:', error);
+      empty.style.display = 'block';
+      empty.textContent = 'Кейсы временно не загрузились. Мы уже проверяем.';
+    }
+  }
+  loadPublicCases();
+
   // SECURE CONTACT FORM
   async function sendForm(e) {
     if (e) e.preventDefault();
