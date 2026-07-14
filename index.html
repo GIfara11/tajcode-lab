@@ -1232,7 +1232,8 @@
 
       grid.innerHTML = products.map((product) => {
         const stack = splitStack(product.stack);
-        const cover = product.cover
+        const hasImageCover = /\.(png|jpe?g|webp|gif|svg|avif)(\?|#|$)/i.test(product.cover || '');
+        const cover = hasImageCover
           ? `<div class="case-cover"><img src="${escapeHtml(product.cover)}" alt="${escapeHtml(product.title)}" loading="lazy"></div>`
           : '<div class="case-cover" aria-hidden="true"></div>';
         const link = product.url
