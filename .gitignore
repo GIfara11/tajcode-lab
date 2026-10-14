@@ -2,3 +2,5 @@
 .vercel
 production-*.png
 .claude/
+promo/video/node_modules/
+promo/video/still-*.png

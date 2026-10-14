@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<title>TAJCODE LAB — промо</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@500&display=block" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#04090d;--bg2:#081118;--bg3:#0c1a24;
+    --accent:#00e5ff;--gold:#f0c040;
+    --text:#e6f2f8;--muted:#7f9fb2;
+    --border:rgba(0,229,255,.16);
+    --sans:'Inter','DejaVu Sans',sans-serif;
+    --display:'Syne','Inter',sans-serif;
+    --mono:'JetBrains Mono','DejaVu Sans Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
+  body{font-family:var(--sans);color:var(--text);-webkit-font-smoothing:antialiased}
+  #stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#07151c 0%,var(--bg) 60%)}
+
+  #grid{position:absolute;inset:-120px;background-image:linear-gradient(rgba(0,229,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.05) 1px,transparent 1px);background-size:90px 90px}
+  .orb{position:absolute;border-radius:50%;filter:blur(90px)}
+  #orb1{width:900px;height:900px;background:radial-gradient(circle,rgba(0,229,255,.22),transparent 70%)}
+  #orb2{width:760px;height:760px;background:radial-gradient(circle,rgba(240,192,64,.13),transparent 70%)}
+  #glyphs span{position:absolute;font-family:var(--mono);color:var(--accent);font-size:34px;opacity:.12}
+  #noise{position:absolute;inset:0;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  .scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 90px;opacity:0}
+  .w{display:inline-block;will-change:transform,opacity}
+  .grad{background:linear-gradient(100deg,var(--accent) 0%,var(--gold) 80%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .label{font-family:var(--mono);font-size:30px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:16px}
+  .label::before{content:'';width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px var(--accent)}
+
+  #logo-top{position:absolute;top:150px;left:0;right:0;text-align:center;font-family:var(--display);font-weight:800;font-size:44px;letter-spacing:-.02em}
+  .logo span{color:var(--accent)}
+
+  /* S1 */
+  #s1{align-items:center;text-align:center}
+  #code-icon{width:300px;height:300px;margin-bottom:70px;overflow:visible;filter:drop-shadow(0 0 22px rgba(0,229,255,.65))}
+  #code-icon path{fill:none;stroke:var(--accent);stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round}
+  #s1 h2{font-size:116px;font-weight:800;line-height:1.02;letter-spacing:-.035em}
+
+  /* S2 */
+  #s2 h1{font-size:132px;font-weight:800;line-height:.98;letter-spacing:-.045em;margin:44px 0 56px}
+  #s2 h1 .line{display:block;overflow:hidden;padding-bottom:.08em}
+  #s2 p{font-size:44px;line-height:1.4;color:var(--muted);font-weight:400}
+  #s2 p b{color:var(--text);font-weight:600}
+
+  /* S3 */
+  #s3 h3,#s4 h3{font-size:86px;font-weight:800;letter-spacing:-.035em;line-height:1.02;margin:34px 0 60px}
+  .card{display:flex;align-items:center;gap:36px;padding:38px 42px;margin-bottom:26px;border-radius:30px;background:linear-gradient(135deg,rgba(12,26,36,.92),rgba(8,17,24,.82));border:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  .card .num{font-family:var(--mono);font-size:32px;color:var(--accent);width:64px}
+  .card .t{font-size:50px;font-weight:700;letter-spacing:-.02em}
+  .card .d{font-size:32px;color:var(--muted);margin-top:8px}
+
+  /* S4 */
+  #steps{position:relative;padding-left:90px}
+  #rail{position:absolute;left:24px;top:20px;width:4px;height:0;background:linear-gradient(var(--accent),var(--gold));border-radius:2px;box-shadow:0 0 20px rgba(0,229,255,.5)}
+  .step{position:relative;margin-bottom:52px}
+  .step::before{content:'';position:absolute;left:-80px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--bg);border:4px solid var(--accent);box-shadow:0 0 18px rgba(0,229,255,.6)}
+  .step .t{font-size:58px;font-weight:700;letter-spacing:-.02em}
+  .step .d{font-size:34px;color:var(--muted);margin-top:6px}
+  #chips{display:flex;flex-wrap:wrap;gap:18px;margin-top:20px}
+  .chip{font-size:32px;font-weight:600;padding:18px 30px;border-radius:60px;border:1px solid rgba(240,192,64,.4);color:var(--gold);background:rgba(240,192,64,.07)}
+
+  /* S5 */
+  #s5{align-items:center;text-align:center}
+  #s5 .k{font-size:58px;font-weight:700;letter-spacing:-.02em;margin-top:40px}
+  #price{font-family:var(--display);font-weight:800;font-size:210px;line-height:1.05;letter-spacing:-.03em;margin:20px 0 30px;display:flex;align-items:baseline;gap:24px}
+  #price small{font-family:var(--sans);font-size:70px;font-weight:600;color:var(--muted);letter-spacing:-.02em}
+  #s5 .facts{display:flex;flex-direction:column;gap:22px;margin-top:40px;width:100%}
+  .fact{display:flex;align-items:center;gap:26px;font-size:42px;padding:30px 40px;border-radius:26px;background:rgba(12,26,36,.8);border:1px solid var(--border);text-align:left}
+  .fact i{font-style:normal;color:var(--accent);font-size:44px;width:52px;text-align:center}
+
+  /* S6 */
+  #s6{align-items:center;text-align:center}
+  #s6 .logo{font-family:var(--display);font-weight:800;font-size:112px;letter-spacing:-.04em;line-height:1}
+  #s6 .tag{font-size:46px;color:var(--muted);margin:34px 0 90px;line-height:1.35}
+  #cta{position:relative;display:inline-flex;align-items:center;gap:22px;background:var(--accent);color:var(--bg);font-weight:800;font-size:56px;padding:42px 76px;border-radius:26px;overflow:hidden}
+  #cta::after{content:'';position:absolute;top:0;bottom:0;width:180px;left:var(--shine,-220px);background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg)}
+  #s6 .site{font-family:var(--mono);font-size:54px;margin-top:80px;color:var(--text)}
+  #s6 .tg{font-size:40px;color:var(--muted);margin-top:22px}
+  #s6 .tg b{color:var(--accent);font-weight:600}
+  #s6 .geo{font-family:var(--mono);font-size:28px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-top:70px}
+
+  #bar{position:absolute;left:0;bottom:0;height:8px;width:0;background:linear-gradient(90deg,var(--accent),var(--gold))}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="grid"></div>
+  <div class="orb" id="orb1"></div>
+  <div class="orb" id="orb2"></div>
+  <div id="glyphs"></div>
+  <div id="noise"></div>
+
+  <div id="logo-top" class="logo">TAJ<span>CODE</span> LAB</div>
+
+  <section class="scene" id="s1">
+    <svg id="code-icon" viewBox="0 0 64 64"><path id="ic1" d="M24 20 12 32l12 12"/><path id="ic2" d="M40 20l12 12-12 12"/><path id="ic3" d="M35 16 29 48"/></svg>
+    <h2><span class="w">Нужен</span> <span class="w">сайт,</span><br/><span class="w grad">приложение</span><br/><span class="w">или</span> <span class="w">бот?</span></h2>
+  </section>
+
+  <section class="scene" id="s2">
+    <div class="label">IT-студия · Душанбе</div>
+    <h1>
+      <span class="line"><span class="w">Технологии,</span></span>
+      <span class="line"><span class="w grad">которые двигают</span></span>
+      <span class="line"><span class="w">бизнес вперёд</span></span>
+    </h1>
+    <p class="w">Продукт <b>под ключ</b>: стратегия, дизайн,<br/>разработка, интеграции и запуск.</p>
+  </section>
+
+  <section class="scene" id="s3">
+    <div class="label">Что делаем</div>
+    <h3>Полный спектр<br/><span class="grad">IT-разработки</span></h3>
+    <div class="card"><div class="num">01</div><div><div class="t">Сайты и лендинги</div><div class="d">Лендинг — за 5–10 рабочих дней</div></div></div>
+    <div class="card"><div class="num">02</div><div><div class="t">Мобильные приложения</div><div class="d">iOS и Android · React Native, Flutter</div></div></div>
+    <div class="card"><div class="num">03</div><div><div class="t">CRM и веб-системы</div><div class="d">CRM · ERP · маркетплейсы · SaaS</div></div></div>
+    <div class="card"><div class="num">04</div><div><div class="t">Telegram-боты</div><div class="d">Заявки · автоворонки · интеграция с CRM</div></div></div>
+  </section>
+
+  <section class="scene" id="s4">
+    <div class="label">Как работаем</div>
+    <h3>Прозрачно<br/><span class="grad">без сюрпризов</span></h3>
+    <div id="steps">
+      <div id="rail"></div>
+      <div class="step"><div class="t">Бриф и анализ</div><div class="d">Фиксируем требования в документе</div></div>
+      <div class="step"><div class="t">Дизайн и прототип</div><div class="d">Правки на этом этапе — бесплатно</div></div>
+      <div class="step"><div class="t">Разработка</div><div class="d">Показываем прогресс каждую неделю</div></div>
+      <div class="step"><div class="t">Запуск и поддержка</div><div class="d">Домен, хостинг, App Store / Google Play</div></div>
+    </div>
+    <div id="chips"><span class="chip">Договор и NDA</span><span class="chip">Еженедельные демо</span></div>
+  </section>
+
+  <section class="scene" id="s5">
+    <div class="label">Честные цены</div>
+    <div class="k">Сайт под ключ</div>
+    <div id="price"><small>от</small><span class="grad" id="price-n">500$</span></div>
+    <div class="facts">
+      <div class="fact"><i>✓</i><span>Фиксированная цена по договору</span></div>
+      <div class="fact"><i>✓</i><span>Старт за 3 дня после подписания</span></div>
+      <div class="fact"><i>✓</i><span>Личный менеджер в Telegram</span></div>
+    </div>
+  </section>
+
+  <section class="scene" id="s6">
+    <div class="logo">TAJ<span>CODE</span><br/>LAB</div>
+    <div class="tag">Давайте создадим<br/>ваш продукт</div>
+    <div id="cta">Оставить заявку →</div>
+    <div class="site">tajcode-lab.ru</div>
+    <div class="tg">Telegram: <b>@tajcodelab_bot</b></div>
+    <div class="geo">Душанбе · Центральная Азия</div>
+  </section>
+
+  <div id="bar"></div>
+</div>
+
+<script>
+const DURATION = 22.5;
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+const clamp = v => Math.max(0, Math.min(1, v));
+const p = (t, a, d) => clamp((t - a) / d);
+const outCubic = x => 1 - Math.pow(1 - x, 3);
+const inCubic = x => x * x * x;
+const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const outBack = x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+
+function set(el, { o = 1, x = 0, y = 0, s = 1, r = 0, blur = 0 } = {}) {
+  el.style.opacity = o;
+  el.style.transform = `translate(${x}px,${y}px) scale(${s}) rotate(${r}deg)`;
+  el.style.filter = blur > 0.05 ? `blur(${blur}px)` : 'none';
+}
+
+function reveal(el, t, start, { dy = 70, dur = .6, blur = 12, scale = 1 } = {}) {
+  const k = outCubic(p(t, start, dur));
+  set(el, { o: k, y: (1 - k) * dy, blur: (1 - k) * blur, s: scale + (1 - scale) * k });
+}
+
+function scene(el, t, a, b, fadeIn = .35, fadeOut = .4) {
+  const i = outCubic(p(t, a, fadeIn));
+  const o = inCubic(p(t, b - fadeOut, fadeOut));
+  el.style.opacity = i * (1 - o);
+  el.style.transform = `translateY(${-o * 90}px) scale(${1 - o * .04})`;
+  el.style.filter = o > .01 ? `blur(${o * 14}px)` : 'none';
+  el.style.visibility = (t < a || t > b) ? 'hidden' : 'visible';
+}
+
+const glyphSet = ['</>', '{ }', '=>', '()', '[]', '#', '&&', '01', '::', '//'];
+let seed = 7;
+const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const glyphs = Array.from({ length: 22 }, (_, i) => {
+  const el = document.createElement('span');
+  el.textContent = glyphSet[i % glyphSet.length];
+  $('#glyphs').appendChild(el);
+  return { el, x: rnd() * 1000, y: rnd() * 1920, sp: 18 + rnd() * 40, ph: rnd() * 6.28, sz: 26 + rnd() * 30 };
+});
+
+const icPaths = ['#ic1', '#ic2', '#ic3'].map(s => { const el = $(s); const L = el.getTotalLength(); el.style.strokeDasharray = L; return { el, L }; });
+
+function render(t) {
+  // background
+  $('#grid').style.transform = `translate(${(t * 14) % 90}px,${(t * 22) % 90}px)`;
+  $('#orb1').style.transform = `translate(${-260 + Math.sin(t * .35) * 160}px,${-200 + t * 26}px)`;
+  $('#orb2').style.transform = `translate(${520 + Math.cos(t * .3) * 140}px,${1400 - t * 30}px)`;
+  glyphs.forEach(g => {
+    const y = ((g.y - t * g.sp) % 2000 + 2000) % 2000 - 40;
+    g.el.style.transform = `translate(${g.x + Math.sin(t * .6 + g.ph) * 22}px,${y}px)`;
+    g.el.style.fontSize = g.sz + 'px';
+  });
+  $('#bar').style.width = (t / DURATION * 100) + '%';
+
+  // persistent top logo (S2–S5)
+  const lt = outCubic(p(t, 3.4, .5)) * (1 - p(t, 18.6, .4));
+  set($('#logo-top'), { o: lt, y: (1 - lt) * -30 });
+
+  // S1 — hook
+  scene($('#s1'), t, 0, 3.3, .01, .45);
+  icPaths.forEach(({ el, L }, i) => { el.style.strokeDashoffset = L * (1 - inOut(p(t, .1 + i * .18, .7))); });
+  const icon = $('#code-icon');
+  const ik = outBack(p(t, 0, .7));
+  icon.style.transform = `scale(${.6 + .4 * ik}) rotate(${(1 - ik) * -12}deg)`;
+  $$('#s1 .w').forEach((el, i) => reveal(el, t, .7 + i * .14, { dy: 90 }));
+
+  // S2 — main message
+  scene($('#s2'), t, 3.2, 7.4);
+  reveal($('#s2 .label'), t, 3.3, { dy: 30 });
+  $$('#s2 h1 .w').forEach((el, i) => {
+    const k = outCubic(p(t, 3.5 + i * .22, .8));
+    set(el, { o: 1, y: (1 - k) * 170, r: (1 - k) * 4 });
+  });
+  reveal($('#s2 p'), t, 4.5, { dy: 40 });
+
+  // S3 — services
+  scene($('#s3'), t, 7.3, 11.9);
+  reveal($('#s3 .label'), t, 7.4, { dy: 30 });
+  reveal($('#s3 h3'), t, 7.55, { dy: 60 });
+  $$('#s3 .card').forEach((el, i) => {
+    const k = outCubic(p(t, 8.0 + i * .28, .7));
+    set(el, { o: k, x: (1 - k) * 420, blur: (1 - k) * 10 });
+  });
+
+  // S4 — process
+  scene($('#s4'), t, 11.8, 16.0);
+  reveal($('#s4 .label'), t, 11.9, { dy: 30 });
+  reveal($('#s4 h3'), t, 12.05, { dy: 60 });
+  $('#rail').style.height = (inOut(p(t, 12.4, 1.8)) * 560) + 'px';
+  $$('#s4 .step').forEach((el, i) => {
+    const k = outCubic(p(t, 12.5 + i * .42, .6));
+    set(el, { o: k, x: (1 - k) * -60, blur: (1 - k) * 8 });
+  });
+  $$('#s4 .chip').forEach((el, i) => {
+    const k = outBack(p(t, 14.3 + i * .18, .55));
+    set(el, { o: clamp(k), s: .7 + .3 * k });
+  });
+
+  // S5 — price
+  scene($('#s5'), t, 15.9, 19.4);
+  reveal($('#s5 .label'), t, 16.0, { dy: 30 });
+  reveal($('#s5 .k'), t, 16.15, { dy: 40 });
+  const pk = outBack(p(t, 16.3, .7));
+  set($('#price'), { o: clamp(pk * 1.5), s: .6 + .4 * pk });
+  $('#price-n').textContent = Math.round(outCubic(p(t, 16.3, 1.0)) * 500) + '$';
+  $$('#s5 .fact').forEach((el, i) => reveal(el, t, 17.0 + i * .22, { dy: 50 }));
+
+  // S6 — CTA
+  scene($('#s6'), t, 19.3, DURATION + 1, .5, .01);
+  const lk = outBack(p(t, 19.4, .8));
+  set($('#s6 .logo'), { o: clamp(lk * 1.4), s: .75 + .25 * lk, blur: (1 - clamp(lk)) * 10 });
+  reveal($('#s6 .tag'), t, 19.8, { dy: 40 });
+  const ck = outBack(p(t, 20.2, .6));
+  const pulse = t > 20.8 ? 1 + Math.sin((t - 20.8) * 5) * .025 : 1;
+  set($('#cta'), { o: clamp(ck * 1.4), s: (.7 + .3 * ck) * pulse });
+  $('#cta').style.boxShadow = `0 0 ${60 + Math.sin(t * 5) * 30}px rgba(0,229,255,.45)`;
+  $('#cta').style.setProperty('--shine', (-220 + p(t, 21.0, .9) * 1100) + 'px');
+  reveal($('#s6 .site'), t, 20.6, { dy: 30 });
+  reveal($('#s6 .tg'), t, 20.8, { dy: 30 });
+  reveal($('#s6 .geo'), t, 21.0, { dy: 20 });
+}
+
+window.DURATION = DURATION;
+window.render = render;
+render(0);
+
+// Live preview: open scene.html?play in a browser
+if (location.search.includes('play')) {
+  const t0 = performance.now();
+  const loop = () => { render(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>
