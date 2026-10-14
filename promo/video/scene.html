@@ -43,7 +43,7 @@
 
   /* S2 */
   #s2 h1{font-size:132px;font-weight:800;line-height:.98;letter-spacing:-.045em;margin:44px 0 56px}
-  #s2 h1 .line{display:block;overflow:hidden;padding-bottom:.08em}
+  #s2 h1 .line{display:block;width:max-content;padding-bottom:.04em}
   #s2 p{font-size:44px;line-height:1.4;color:var(--muted);font-weight:400}
   #s2 p b{color:var(--text);font-weight:600}
 
@@ -105,9 +105,11 @@
   <section class="scene" id="s2">
     <div class="label">IT-студия</div>
     <h1>
-      <span class="line"><span class="w">Технологии,</span></span>
-      <span class="line"><span class="w grad">которые двигают</span></span>
-      <span class="line"><span class="w">бизнес вперёд</span></span>
+      <span class="line">Технологии,</span>
+      <span class="line grad">которые</span>
+      <span class="line grad">двигают</span>
+      <span class="line">бизнес</span>
+      <span class="line">вперёд</span>
     </h1>
     <p class="w">Продукт <b>под ключ</b>: стратегия, дизайн,<br/>разработка, интеграции и запуск.</p>
   </section>
@@ -165,10 +167,9 @@ const $$ = s => [...document.querySelectorAll(s)];
 
 const clamp = v => Math.max(0, Math.min(1, v));
 const p = (t, a, d) => clamp((t - a) / d);
-const outCubic = x => 1 - Math.pow(1 - x, 3);
 const inCubic = x => x * x * x;
 const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
-const outBack = x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const outQuart = x => 1 - Math.pow(1 - x, 4);
 
 function set(el, { o = 1, x = 0, y = 0, s = 1, r = 0, blur = 0 } = {}) {
   el.style.opacity = o;
@@ -176,17 +177,16 @@ function set(el, { o = 1, x = 0, y = 0, s = 1, r = 0, blur = 0 } = {}) {
   el.style.filter = blur > 0.05 ? `blur(${blur}px)` : 'none';
 }
 
-function reveal(el, t, start, { dy = 70, dur = .6, blur = 12, scale = 1 } = {}) {
-  const k = outCubic(p(t, start, dur));
-  set(el, { o: k, y: (1 - k) * dy, blur: (1 - k) * blur, s: scale + (1 - scale) * k });
+function reveal(el, t, start, { dy = 36, dur = .75, blur = 4, dx = 0 } = {}) {
+  const k = outQuart(p(t, start, dur));
+  set(el, { o: k, x: (1 - k) * dx, y: (1 - k) * dy, blur: (1 - k) * blur });
 }
 
-function scene(el, t, a, b, fadeIn = .35, fadeOut = .4) {
-  const i = outCubic(p(t, a, fadeIn));
-  const o = inCubic(p(t, b - fadeOut, fadeOut));
+function scene(el, t, a, b, fadeIn = .4, fadeOut = .4) {
+  const i = inOut(p(t, a, fadeIn));
+  const o = inOut(p(t, b - fadeOut, fadeOut));
   el.style.opacity = i * (1 - o);
-  el.style.transform = `translateY(${-o * 90}px) scale(${1 - o * .04})`;
-  el.style.filter = o > .01 ? `blur(${o * 14}px)` : 'none';
+  el.style.transform = `translateY(${-o * 28}px)`;
   el.style.visibility = (t < a || t > b) ? 'hidden' : 'visible';
 }
 
@@ -214,72 +214,61 @@ function render(t) {
   });
   $('#bar').style.width = (t / DURATION * 100) + '%';
 
-  // persistent top logo (S2–S5)
-  const lt = outCubic(p(t, 3.4, .5)) * (1 - p(t, 18.6, .4));
-  set($('#logo-top'), { o: lt, y: (1 - lt) * -30 });
+  // Scenes never overlap: each one fully fades out before the next fades in.
+  const lt = inOut(p(t, 3.3, .5)) * (1 - inOut(p(t, 18.9, .4)));
+  set($('#logo-top'), { o: lt, y: (1 - lt) * -16 });
 
   // S1 — hook
   scene($('#s1'), t, 0, 3.3, .01, .45);
   icPaths.forEach(({ el, L }, i) => { el.style.strokeDashoffset = L * (1 - inOut(p(t, .1 + i * .18, .7))); });
+  const ik = outQuart(p(t, 0, .8));
   const icon = $('#code-icon');
-  const ik = outBack(p(t, 0, .7));
-  icon.style.transform = `scale(${.6 + .4 * ik}) rotate(${(1 - ik) * -12}deg)`;
-  $$('#s1 .w').forEach((el, i) => reveal(el, t, .7 + i * .14, { dy: 90 }));
+  icon.style.opacity = ik;
+  icon.style.transform = `scale(${.88 + .12 * ik})`;
+  $$('#s1 .w').forEach((el, i) => reveal(el, t, .7 + i * .12));
 
   // S2 — main message
-  scene($('#s2'), t, 3.2, 7.4);
-  reveal($('#s2 .label'), t, 3.3, { dy: 30 });
-  $$('#s2 h1 .w').forEach((el, i) => {
-    const k = outCubic(p(t, 3.5 + i * .22, .8));
-    set(el, { o: 1, y: (1 - k) * 170, r: (1 - k) * 4 });
-  });
-  reveal($('#s2 p'), t, 4.5, { dy: 40 });
+  scene($('#s2'), t, 3.3, 7.4);
+  reveal($('#s2 .label'), t, 3.35, { dy: 20 });
+  $$('#s2 h1 .line').forEach((el, i) => reveal(el, t, 3.5 + i * .12, { dy: 48, dur: .85 }));
+  reveal($('#s2 p'), t, 4.4);
 
   // S3 — services
-  scene($('#s3'), t, 7.3, 11.9);
-  reveal($('#s3 .label'), t, 7.4, { dy: 30 });
-  reveal($('#s3 h3'), t, 7.55, { dy: 60 });
-  $$('#s3 .card').forEach((el, i) => {
-    const k = outCubic(p(t, 8.0 + i * .28, .7));
-    set(el, { o: k, x: (1 - k) * 420, blur: (1 - k) * 10 });
-  });
+  scene($('#s3'), t, 7.4, 11.9);
+  reveal($('#s3 .label'), t, 7.45, { dy: 20 });
+  reveal($('#s3 h3'), t, 7.6);
+  $$('#s3 .card').forEach((el, i) => reveal(el, t, 8.0 + i * .2, { dy: 0, dx: 70 }));
 
   // S4 — process
-  scene($('#s4'), t, 11.8, 16.0);
-  reveal($('#s4 .label'), t, 11.9, { dy: 30 });
-  reveal($('#s4 h3'), t, 12.05, { dy: 60 });
-  $('#rail').style.height = (inOut(p(t, 12.4, 1.8)) * 560) + 'px';
-  $$('#s4 .step').forEach((el, i) => {
-    const k = outCubic(p(t, 12.5 + i * .42, .6));
-    set(el, { o: k, x: (1 - k) * -60, blur: (1 - k) * 8 });
-  });
-  $$('#s4 .chip').forEach((el, i) => {
-    const k = outBack(p(t, 14.3 + i * .18, .55));
-    set(el, { o: clamp(k), s: .7 + .3 * k });
-  });
+  scene($('#s4'), t, 11.9, 16.0);
+  reveal($('#s4 .label'), t, 11.95, { dy: 20 });
+  reveal($('#s4 h3'), t, 12.1);
+  $('#rail').style.height = (inOut(p(t, 12.45, 1.8)) * 560) + 'px';
+  $$('#s4 .step').forEach((el, i) => reveal(el, t, 12.5 + i * .4, { dy: 0, dx: -40 }));
+  $$('#s4 .chip').forEach((el, i) => reveal(el, t, 14.2 + i * .15, { dy: 24 }));
 
   // S5 — price
-  scene($('#s5'), t, 15.9, 19.4);
-  reveal($('#s5 .label'), t, 16.0, { dy: 30 });
-  reveal($('#s5 .k'), t, 16.15, { dy: 40 });
-  const pk = outBack(p(t, 16.3, .7));
-  set($('#price'), { o: clamp(pk * 1.5), s: .6 + .4 * pk });
-  $('#price-n').textContent = Math.round(outCubic(p(t, 16.3, 1.0)) * 500) + '$';
-  $$('#s5 .fact').forEach((el, i) => reveal(el, t, 17.0 + i * .22, { dy: 50 }));
+  scene($('#s5'), t, 16.0, 19.3);
+  reveal($('#s5 .label'), t, 16.05, { dy: 20 });
+  reveal($('#s5 .k'), t, 16.2);
+  const pk = outQuart(p(t, 16.35, .9));
+  set($('#price'), { o: pk, s: .92 + .08 * pk });
+  $('#price-n').textContent = Math.round(outQuart(p(t, 16.35, 1.1)) * 500) + '$';
+  $$('#s5 .fact').forEach((el, i) => reveal(el, t, 17.0 + i * .2));
 
   // S6 — CTA
-  scene($('#s6'), t, 19.3, DURATION + 1, .5, .01);
-  const lk = outBack(p(t, 19.4, .8));
-  set($('#s6 .logo'), { o: clamp(lk * 1.4), s: .75 + .25 * lk, blur: (1 - clamp(lk)) * 10 });
-  reveal($('#s6 .tag'), t, 19.8, { dy: 40 });
-  const ck = outBack(p(t, 20.2, .6));
-  const pulse = t > 20.8 ? 1 + Math.sin((t - 20.8) * 5) * .025 : 1;
-  set($('#cta'), { o: clamp(ck * 1.4), s: (.7 + .3 * ck) * pulse });
-  $('#cta').style.boxShadow = `0 0 ${60 + Math.sin(t * 5) * 30}px rgba(0,229,255,.45)`;
-  $('#cta').style.setProperty('--shine', (-220 + p(t, 21.0, .9) * 1100) + 'px');
-  reveal($('#s6 .site'), t, 20.6, { dy: 30 });
-  $$('#s6 .tg').forEach((el, i) => reveal(el, t, 20.8 + i * .15, { dy: 30 }));
-  reveal($('#s6 .geo'), t, 21.0, { dy: 20 });
+  scene($('#s6'), t, 19.3, DURATION + 1, .45, .01);
+  const lk = outQuart(p(t, 19.4, .9));
+  set($('#s6 .logo'), { o: lk, s: .94 + .06 * lk });
+  reveal($('#s6 .tag'), t, 19.75);
+  const ck = outQuart(p(t, 20.1, .8));
+  const pulse = 1 + Math.sin(Math.max(0, t - 20.9) * 3.2) * .012;
+  set($('#cta'), { o: ck, y: (1 - ck) * 24, s: pulse });
+  $('#cta').style.boxShadow = `0 0 ${60 + Math.sin(t * 3.2) * 20}px rgba(0,229,255,.45)`;
+  $('#cta').style.setProperty('--shine', (-220 + inOut(p(t, 21.0, 1.1)) * 1100) + 'px');
+  reveal($('#s6 .site'), t, 20.5, { dy: 24 });
+  $$('#s6 .tg').forEach((el, i) => reveal(el, t, 20.65 + i * .12, { dy: 24 }));
+  reveal($('#s6 .geo'), t, 20.95, { dy: 16 });
 }
 
 window.DURATION = DURATION;
