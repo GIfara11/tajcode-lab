@@ -80,7 +80,7 @@
   #cta{position:relative;display:inline-flex;align-items:center;gap:22px;background:var(--accent);color:var(--bg);font-weight:800;font-size:56px;padding:42px 76px;border-radius:26px;overflow:hidden}
   #cta::after{content:'';position:absolute;top:0;bottom:0;width:180px;left:var(--shine,-220px);background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg)}
   #s6 .site{font-family:var(--mono);font-size:54px;margin-top:80px;color:var(--text)}
-  #s6 .tg{font-size:40px;color:var(--muted);margin-top:22px}
+  #s6 .tg{font-size:40px;color:var(--muted);margin-top:18px}
   #s6 .tg b{color:var(--accent);font-weight:600}
   #s6 .geo{font-family:var(--mono);font-size:28px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-top:70px}
 
@@ -115,7 +115,7 @@
   <section class="scene" id="s3">
     <div class="label">Что делаем</div>
     <h3>Полный спектр<br/><span class="grad">IT-разработки</span></h3>
-    <div class="card"><div class="num">01</div><div><div class="t">Сайты и лендинги</div><div class="d">Лендинг — за 5–10 рабочих дней</div></div></div>
+    <div class="card"><div class="num">01</div><div><div class="t">Сайты и лендинги</div><div class="d">Лендинг — за 1–2 дня</div></div></div>
     <div class="card"><div class="num">02</div><div><div class="t">Мобильные приложения</div><div class="d">iOS и Android · React Native, Flutter</div></div></div>
     <div class="card"><div class="num">03</div><div><div class="t">CRM и веб-системы</div><div class="d">CRM · ERP · маркетплейсы · SaaS</div></div></div>
     <div class="card"><div class="num">04</div><div><div class="t">Telegram-боты</div><div class="d">Заявки · автоворонки · интеграция с CRM</div></div></div>
@@ -150,7 +150,8 @@
     <div class="tag">Давайте создадим<br/>ваш продукт</div>
     <div id="cta">Оставить заявку →</div>
     <div class="site">tajcode-lab.ru</div>
-    <div class="tg">Telegram: <b>@tajcodelab_bot</b></div>
+    <div class="tg">Бот: <b>@tajcodelab_bot</b></div>
+    <div class="tg">Менеджер: <b>@d122145</b></div>
     <div class="geo">Центральная Азия</div>
   </section>
 
@@ -277,7 +278,7 @@ function render(t) {
   $('#cta').style.boxShadow = `0 0 ${60 + Math.sin(t * 5) * 30}px rgba(0,229,255,.45)`;
   $('#cta').style.setProperty('--shine', (-220 + p(t, 21.0, .9) * 1100) + 'px');
   reveal($('#s6 .site'), t, 20.6, { dy: 30 });
-  reveal($('#s6 .tg'), t, 20.8, { dy: 30 });
+  $$('#s6 .tg').forEach((el, i) => reveal(el, t, 20.8 + i * .15, { dy: 30 }));
   reveal($('#s6 .geo'), t, 21.0, { dy: 20 });
 }
 
